@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Passenger Guidelines – TrackMyBus.lk</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f2f2f2;
+      color: #333;
+      padding: 1rem;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background-color: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .app-heading {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .info-list {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    .info-card {
+      background-color: #f9f9f9;
+      border-left: 6px solid #28a745;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .info-card h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+      color: #28a745;
+    }
+
+    .info-card p {
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .app-button {
+      display: block;
+      width: 100%;
+      margin-top: 2rem;
+      padding: 0.8rem;
+      font-size: 1rem;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .app-button:hover {
+      background-color: #1e7e34;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h2 class="app-heading">Passenger Travel Guidelines</h2>
+
+    <ul class="info-list">
+
+      <li class="info-card">
+        <h3>🚌 Wait at Designated Halts</h3>
+        <p>Always stand at registered bus halts. Avoid boarding or exiting in the middle of the road.</p>
+      </li>
+
+      <li class="info-card">
+        <h3>📱 Enable Location Services</h3>
+        <p>Keep your location on for the app to suggest nearby buses and estimate arrival time accurately.</p>
+      </li>
+
+      <li class="info-card">
+        <h3>👥 Queue Respectfully</h3>
+        <p>Stand in line while boarding. Give priority to elderly, pregnant, and disabled passengers.</p>
+      </li>
+
+      <li class="info-card">
+        <h3>🗺️ Track Your Ride Live</h3>
+        <p>Use the map to see live location of buses. Avoid calling the driver while on duty.</p>
+      </li>
+
+      <li class="info-card">
+        <h3>🗣️ Be Kind and Cooperative</h3>
+        <p>Speak politely to drivers and fellow passengers. Report any issues via the contact page.</p>
+      </li>
+
+    </ul>
+
+    <button class="app-button" onclick="continueToSearch()">Continue</button>
+  </div>
+
+  <script>
+    function continueToSearch() {
+      window.location.href = "passengerSearch.html";
+    }
+  </script>
+
+</body>
+</html>
+ 

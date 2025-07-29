@@ -1,0 +1,156 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Settings – TrackMyBus.lk</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 400px;
+      padding: 2rem;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+
+    .app-heading {
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .setting-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    select, input[type="checkbox"] {
+      width: 100%;
+      padding: 0.6rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 0.8rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #007BFF;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+    }
+
+    body.dark-mode {
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .container {
+      background-color: #1e1e1e;
+      box-shadow: 0 0 8px rgba(255,255,255,0.05);
+    }
+
+    body.dark-mode select,
+    body.dark-mode input {
+      background-color: #333;
+      color: white;
+      border: 1px solid #666;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h2 class="app-heading">App Settings</h2>
+
+    <!-- Language -->
+    <div class="setting-group">
+      <label for="languageSelect">Language</label>
+      <select id="languageSelect">
+        <option value="en">English</option>
+        <option value="si">සිංහල</option>
+        <option value="ta">தமிழ்</option>
+      </select>
+    </div>
+
+    <!-- Dark Mode -->
+    <div class="setting-group toggle-row">
+      <label for="darkModeToggle">Dark Mode</label>
+      <input type="checkbox" id="darkModeToggle" />
+    </div>
+
+    <!-- Refresh Interval -->
+    <div class="setting-group">
+      <label for="refreshRate">Auto Refresh Interval (seconds)</label>
+      <select id="refreshRate">
+        <option value="5">5 sec</option>
+        <option value="10" selected>10 sec</option>
+        <option value="30">30 sec</option>
+        <option value="60">1 min</option>
+      </select>
+    </div>
+
+    <!-- Driver Login Link -->
+    <div class="setting-group">
+      <button class="btn" onclick="goToDriverLogin()">Driver Login</button>
+    </div>
+
+  </div>
+
+  <script>
+    // Dark Mode
+    const toggle = document.getElementById("darkModeToggle");
+    toggle.addEventListener("change", () => {
+      document.body.classList.toggle("dark-mode", toggle.checked);
+      localStorage.setItem("darkMode", toggle.checked);
+    });
+
+    // Load saved setting
+    window.onload = () => {
+      const savedDark = localStorage.getItem("darkMode") === "true";
+      toggle.checked = savedDark;
+      if (savedDark) document.body.classList.add("dark-mode");
+    };
+
+    function goToDriverLogin() {
+      window.location.href = "driverLogin.html";
+    }
+  </script>
+
+</body>
+</html>

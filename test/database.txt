@@ -1,0 +1,77 @@
+CREATE DATABASE bustrackv1;
+USE bustrackv1;
+
+
+-- Update the users table to include a password hash field
+CREATE TABLE IF NOT EXISTS users (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,  -- Unique user ID
+    name VARCHAR(255) NOT NULL,              -- User name
+    email VARCHAR(255) UNIQUE NOT NULL,      -- Email (unique)
+    phone_number VARCHAR(15) UNIQUE,        -- Phone number (unique for drivers)
+    profile_picture VARCHAR(255),           -- Link to the profile picture (URL)
+    password_hash VARCHAR(255) NOT NULL,     -- Hashed password (never store plain text passwords)
+    role ENUM('passenger', 'driver') NOT NULL,  -- User role (either passenger or driver)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Timestamp of user creation
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP  -- Last update
+);
+
+
+CREATE TABLE user_settings (
+    setting_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    notification_enabled BOOLEAN DEFAULT TRUE, -- Whether notifications are enabled
+    language_preference VARCHAR(50) DEFAULT 'English', -- User language preference
+    theme_preference ENUM('light', 'dark') DEFAULT 'light', -- Theme preference
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE -- Reference to users table
+);
+
+
+CREATE TABLE routes (
+    route_id INT PRIMARY KEY AUTO_INCREMENT, -- Unique route ID
+    name VARCHAR(255) NOT NULL,              -- Route name
+    description TEXT,                        -- Description of the route
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Timestamp of route creation
+);
+
+
+CREATE TABLE stops (
+    stop_id INT PRIMARY KEY AUTO_INCREMENT, -- Unique stop ID
+    route_id INT,                           -- Route ID (linked to routes table)
+    stop_name VARCHAR(255) NOT NULL,         -- Name of the stop
+    location POINT,                         -- Geographical coordinates (lat, lng)
+    arrival_time TIME,                      -- Estimated arrival time at the stop
+    FOREIGN KEY (route_id) REFERENCES routes(route_id) ON DELETE CASCADE -- Link to routes table
+);
+
+
+CREATE TABLE buses (
+    bus_id INT PRIMARY KEY AUTO_INCREMENT,   -- Unique bus ID
+    driver_id INT,                           -- Driver ID (linked to users table)
+    route_id INT,                            -- The route the bus is on (linked to routes table)
+    current_location POINT,                  -- Geographical coordinates of the bus (lat, lng)
+    status ENUM('on_time', 'delayed') DEFAULT 'on_time', -- Bus status
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Last time the location was updated
+    FOREIGN KEY (driver_id) REFERENCES users(user_id) ON DELETE CASCADE, -- Link to driver (user table)
+    FOREIGN KEY (route_id) REFERENCES routes(route_id) ON DELETE CASCADE -- Link to route (routes table)
+);
+
+
+CREATE TABLE notifications (
+    notification_id INT PRIMARY KEY AUTO_INCREMENT, -- Unique notification ID
+    user_id INT,                                   -- User ID to send notifications to (linked to users table)
+    message TEXT,                                  -- Notification message
+    type ENUM('arrival', 'delay', 'route_update') NOT NULL, -- Type of notification
+    status ENUM('read', 'unread') DEFAULT 'unread', -- Notification status
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Timestamp when the notification was created
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE -- Link to users table
+);
+
+
+CREATE TABLE feedback (
+    feedback_id INT PRIMARY KEY AUTO_INCREMENT, -- Unique feedback ID
+    user_id INT,                                -- User ID who gave the feedback (linked to users table)
+    rating INT CHECK (rating >= 1 AND rating <= 5), -- Rating (1 to 5)
+    comment TEXT,                               -- Feedback comment
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Timestamp when feedback was given
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE -- Link to users table
+);

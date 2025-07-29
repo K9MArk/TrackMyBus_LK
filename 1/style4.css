@@ -1,0 +1,52 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow: hidden;
+  background: #111;
+}
+
+.road-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.road {
+  position: absolute;
+  height: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+/* Car styles */
+.car {
+  position: absolute;
+  width: auto;
+  height: auto;
+  z-index: 2;
+  animation: drive 10s linear infinite;
+}
+
+/* Each car has a unique lane and offset */
+.car1 { left: 45%; animation-delay: 0s; }
+.car2 { left: 55%; animation-delay: 1s; }
+.car3 { left: 40%; animation-delay: 2s; }
+.car4 { left: 60%; animation-delay: 3s; }
+.car5 { left: 50%; animation-delay: 4s; }
+.car6 { left: 35%; animation-delay: 5s; }
+.car7 { left: 65%; animation-delay: 6s; }
+
+@keyframes drive {
+  0% {
+    top: 100%;
+  }
+  100% {
+    top: -100px;
+  }
+}

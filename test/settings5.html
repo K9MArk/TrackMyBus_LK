@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+</head>
+<body>
+    <h2>User Settings</h2>
+     <a href="home5.html">Home</a>
+    
+    <!-- Language Selection -->
+    <label for="language">Choose Language:</label>
+    <select id="language">
+        <option value="en">English</option>
+        <option value="si">Sinhala</option>
+    </select>
+
+    <br><br>
+
+    <!-- Background Color Selection -->
+    <label for="bg-color">Background Color:</label>
+    <input type="color" id="bg-color" value="#ffffff">
+
+    <br><br>
+
+    <!-- Font Color Selection -->
+    <label for="font-color">Font Color:</label>
+    <input type="color" id="font-color" value="#000000">
+
+    <br><br>
+
+    <button id="save-btn">Save Settings</button>
+
+    <h3>Preview:</h3>
+    <!-- Preview Area -->
+    <div id="preview-area" style="padding: 20px; border: 1px solid #ddd;">
+        <h4 id="preview-welcome-message">Welcome to the Bus Tracking System</h4>
+        <p id="preview-intro-text">This system allows you to track buses in real-time, view routes, and book seats.</p>
+    </div>
+
+    <script>
+        // Set the default language and colors based on localStorage (if any)
+        const storedLanguage = localStorage.getItem('preferredLanguage') || 'en';
+        const storedBgColor = localStorage.getItem('bgColor') || '#ffffff';
+        const storedFontColor = localStorage.getItem('fontColor') || '#000000';
+
+        // Set default settings
+        document.getElementById('language').value = storedLanguage;
+        document.getElementById('bg-color').value = storedBgColor;
+        document.getElementById('font-color').value = storedFontColor;
+
+        // Set the preview based on settings
+        setPreview(storedLanguage, storedBgColor, storedFontColor);
+
+        // Handle live preview when settings change
+        document.getElementById('language').addEventListener('change', function() {
+            const selectedLanguage = this.value;
+            const selectedBgColor = document.getElementById('bg-color').value;
+            const selectedFontColor = document.getElementById('font-color').value;
+            setPreview(selectedLanguage, selectedBgColor, selectedFontColor);
+        });
+
+        document.getElementById('bg-color').addEventListener('input', function() {
+            const selectedLanguage = document.getElementById('language').value;
+            const selectedBgColor = this.value;
+            const selectedFontColor = document.getElementById('font-color').value;
+            setPreview(selectedLanguage, selectedBgColor, selectedFontColor);
+        });
+
+        document.getElementById('font-color').addEventListener('input', function() {
+            const selectedLanguage = document.getElementById('language').value;
+            const selectedBgColor = document.getElementById('bg-color').value;
+            const selectedFontColor = this.value;
+            setPreview(selectedLanguage, selectedBgColor, selectedFontColor);
+        });
+
+        // Function to change the preview content based on the selected language and colors
+        function setPreview(language, bgColor, fontColor) {
+            // Set background and font color for the preview
+            document.getElementById('preview-area').style.backgroundColor = bgColor;
+            document.getElementById('preview-area').style.color = fontColor;
+
+            // Set the preview text based on the language
+            const texts = {
+                en: {
+                    welcome_message: "Welcome to the Bus Tracking System",
+                    intro_text: "This system allows you to track buses in real-time, view routes, and book seats."
+                },
+                si: {
+                    welcome_message: "බස් ට්‍රැකින් පද්ධතියට පිළිගනිමු",
+                    intro_text: "මෙම පද්ධතිය මගින් ඔබට බස් ට්‍රැක් කිරීමට, මාර්ග දැක්වීමට සහ අසුන වෙන් කිරීමට හැකිවනු ඇත."
+                }
+            };
+
+            document.getElementById('preview-welcome-message').innerText = texts[language].welcome_message;
+            document.getElementById('preview-intro-text').innerText = texts[language].intro_text;
+        }
+
+        // Handle Save button click
+        document.getElementById('save-btn').addEventListener('click', function() {
+            const selectedLanguage = document.getElementById('language').value;
+            const selectedBgColor = document.getElementById('bg-color').value;
+            const selectedFontColor = document.getElementById('font-color').value;
+
+            // Save settings to localStorage
+            localStorage.setItem('preferredLanguage', selectedLanguage);
+            localStorage.setItem('bgColor', selectedBgColor);
+            localStorage.setItem('fontColor', selectedFontColor);
+
+            alert("Settings Saved!");
+        });
+    </script>
+</body>
+</html>

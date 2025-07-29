@@ -1,0 +1,65 @@
+{
+    "users": [
+        {
+            "userId": "user1_uid",
+            "user_name": "ali.khan",
+            "full_name": "Ali Khan",
+            "email": "ali.khan@gmail.com",
+            "password": "$2b$10$hashedvalue...",
+            "phone_number": "+94771234567",
+            "profile_picture": "https://.../ali.jpg",
+            "role": "customer",
+            "status": "active",
+            "createdAt": "2025-07-19T10:00:00Z",
+            "updatedAt": "2025-07-19T10:00:00Z"
+        }
+    ],
+    "buses": [
+        {
+            "busId": "bus_101",
+            "bus_number": "120",
+            "plate_number": "NC-5489",
+            "capacity": 55,
+            "model": "Ashok Leyland Viking"
+        }
+    ],
+    "routes": [
+        {
+            "routeId": "route_120",
+            "route_name": "Kadawatha - Colombo",
+            "route_description": "Mainline urban route",
+            "createdAt": "2025-07-17T09:00:00Z",
+            "updatedAt": "2025-07-17T09:00:00Z"
+        }
+    ],
+    "route_stops": [
+        {
+            "stopId": "stop1",
+            "routeId": "route_120",
+            "stop_name": "Mahara",
+            "stop_location": "7.043, 79.958",
+            "stop_order": 1
+        }
+    ],
+    "drivers": [
+        {
+            "driverId": "driver1_uid",
+            "userId": "user1_uid",
+            "busId": "bus_101",
+            "routeId": "route_120",
+            "current_location": "Kiribathgoda",
+            "status": "on_time",
+            "last_update": "2025-07-19T11:30:00Z"
+        }
+    ],
+    "bus_location_history": [
+        {
+            "historyId": "his_001",
+            "driverId": "driver1_uid",
+            "busId": "bus_101",
+            "latitude": 7.005,
+            "longitude": 79.92,
+            "timestamp": "2025-07-19T11:35:00Z"
+        }
+    ]
+}

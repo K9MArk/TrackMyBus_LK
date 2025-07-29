@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Save Bus and Route – TrackMyBus</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 30px;
+    }
+
+    h2 {
+      color: #007BFF;
+    }
+
+    form {
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      max-width: 600px;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    button {
+      background-color: #28a745;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    #errorMsg, #successMsg {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    #errorMsg {
+      color: red;
+    }
+
+    #successMsg {
+      color: green;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>Save Your Bus and Route</h2>
+
+  <form id="busRouteForm">
+    <input type="text" id="driverId" placeholder="Driver ID" required readonly>
+    <select id="busId" required>
+      <option value="">Select Bus ID</option>
+      <option value="bus_101">bus_101</option>
+      <option value="bus_102">bus_102</option>
+    </select>
+
+    <select id="routeId" required>
+      <option value="">Select Route</option>
+      <option value="route_120">Kadawatha - Colombo</option>
+      <option value="route_130">Gampaha - Nugegoda</option>
+    </select>
+
+    <input type="text" id="current_location" placeholder="Current Location (optional)">
+
+    <button type="submit">Save Bus and Route</button>
+
+    <p id="errorMsg"></p>
+    <p id="successMsg"></p>
+  </form>
+
+  <script>
+    // Get Driver ID from localStorage
+    const driverId = localStorage.getItem("driverId");
+
+    if (!driverId) {
+      window.location.href = "driverLogin.html"; // Redirect to login page if not logged in
+    } else {
+      document.getElementById("driverId").value = driverId;
+    }
+
+    document.getElementById('busRouteForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const errorMsg = document.getElementById('errorMsg');
+      const successMsg = document.getElementById('successMsg');
+      errorMsg.textContent = '';
+      successMsg.textContent = '';
+
+      // Get form data
+      const busId = document.getElementById('busId').value.trim();
+      const routeId = document.getElementById('routeId').value.trim();
+      const current_location = document.getElementById('current_location').value.trim() || "unknown";
+
+      if (!busId || !routeId) {
+        errorMsg.textContent = "❌ Please fill in all required fields.";
+        return;
+      }
+
+      try {
+        // Step 1: Update driver data with bus and route
+        const driverRes = await fetch('/api/drivers', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            driverId: driverId,
+            busId: busId,
+            routeId: routeId,
+            current_location: current_location,
+            status: 'on_time',  // Assuming initial status is 'on_time'
+          })
+        });
+
+        const driverResult = await driverRes.json();
+
+        if (!driverRes.ok) {
+          errorMsg.textContent = "❌ " + (driverResult.error || "Failed to save bus and route.");
+          return;
+        }
+
+        successMsg.textContent = "✅ Bus and Route saved successfully!";
+        document.getElementById('busRouteForm').reset();
+
+      } catch (err) {
+        console.error(err);
+        errorMsg.textContent = "❌ Network or server error. Try again.";
+      }
+    });
+  </script>
+
+</body>
+
+</html>
+

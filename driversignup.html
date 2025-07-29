@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Driver Registration - TrackMyBus</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 30px;
+    }
+    h2 {
+      color: #007BFF;
+    }
+    form {
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      max-width: 600px;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    button {
+      background-color: #28a745;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    #addMsg, #errorMsg {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    #addMsg { color: green; }
+    #errorMsg { color: red; }
+  </style>
+</head>
+<body>
+
+<h2>Driver Registration</h2>
+<form id="driverForm">
+  <input type="text" id="username" placeholder="Username" required>
+  <input type="password" id="password" placeholder="Password (min 6 chars)" required>
+  <input type="text" id="fullname" placeholder="Full Name" required>
+  <input type="email" id="email" placeholder="Email Address" required>
+  <input type="text" id="phone" placeholder="Phone Number">
+  <input type="text" id="profilePic" placeholder="Profile Picture URL">
+
+  <select id="busId" required>
+    <option value="">Select Bus ID</option>
+    <option value="bus_101">bus_101</option>
+    <option value="bus_102">bus_102</option>
+  </select>
+
+  <select id="routeId" required>
+    <option value="">Select Route</option>
+    <option value="route_120">Kadawatha - Colombo</option>
+    <option value="route_130">Gampaha - Nugegoda</option>
+  </select>
+
+  <input type="text" id="current_location" placeholder="Current Location (optional)">
+  <input type="text" id="status" placeholder="Bus Status (on_time, delayed)" value="on_time">
+
+  <button type="submit">Register Driver</button>
+  <p id="addMsg"></p>
+  <p id="errorMsg"></p>
+</form>
+
+<script>
+  document.getElementById('driverForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const addMsg = document.getElementById('addMsg');
+    const errorMsg = document.getElementById('errorMsg');
+    addMsg.textContent = '';
+    errorMsg.textContent = '';
+
+    const user_name = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const full_name = document.getElementById('fullname').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone_number = document.getElementById('phone').value.trim();
+    const profile_picture = document.getElementById('profilePic').value.trim();
+
+    const busId = document.getElementById('busId').value.trim();
+    const routeId = document.getElementById('routeId').value.trim();
+    const current_location = document.getElementById('current_location').value.trim() || "unknown";
+    const status = document.getElementById('status').value.trim() || "on_time";
+
+    if (!user_name || !password || !full_name || !email || !busId || !routeId) {
+      errorMsg.textContent = "❌ Please fill in all required fields.";
+      return;
+    }
+
+    if (password.length < 6) {
+      errorMsg.textContent = "❌ Password must be at least 6 characters.";
+      return;
+    }
+
+    try {
+      // Step 1: Register user
+      const userRes = await fetch('/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_name, password, full_name, email,
+          phone_number, profile_picture,
+          role: 'driver'
+        })
+      });
+
+      const userResult = await userRes.json();
+
+      if (!userRes.ok) {
+        errorMsg.textContent = "❌ " + (userResult.error || "Failed to register user");
+        return;
+      }
+
+      // Step 2: Register driver
+      const driverRes = await fetch('/api/drivers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          driverId: "driver_" + Date.now(),
+          userId: userResult.userId,  // Use the userId from the response
+          busId,
+          routeId,
+          current_location,
+          status
+        })
+      });
+
+      const driverResult = await driverRes.json();
+
+      if (!driverRes.ok) {
+        errorMsg.textContent = "❌ " + (driverResult.error || "Failed to register driver");
+        return;
+      }
+
+      addMsg.textContent = "✅ Driver registered successfully!";
+      document.getElementById('driverForm').reset();
+    } catch (err) {
+      console.error(err);
+      errorMsg.textContent = "❌ Network or server error. Try again.";
+    }
+  });
+</script>
+
+
+</body>
+</html>
+
+

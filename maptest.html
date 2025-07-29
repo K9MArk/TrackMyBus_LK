@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TrackMyBus LK – Passenger Map</title>
+
+  <!-- Google Maps API -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_API_KEY&callback=initMap" async defer></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f2f2f2;
+      text-align: center;
+    }
+
+    h2 {
+      margin: 20px 0;
+      color: #333;
+    }
+
+    #btn {
+      margin-bottom: 20px;
+      padding: 12px 24px;
+      background-color: #007BFF;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 2px 4px 8px rgba(0,0,0,0.2);
+    }
+
+    #btn:hover {
+      background-color: #0056b3;
+    }
+
+    #map {
+      width: 100%;
+      height: 80vh;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>TrackMyBus LK – Nearest Bus Halts & Live Bus</h2>
+  <button id="btn">Nearest Bus Halts</button>
+  <div id="map"></div>
+
+  <!-- Link to external JavaScript file (map.js) -->
+  <script src="C:\tmb\map.js"></script>
+</body>
+</html>

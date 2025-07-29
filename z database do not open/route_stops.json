@@ -1,0 +1,9 @@
+[
+    {
+        "stopId": "stop1",
+        "routeId": "route_120",
+        "stop_name": "Mahara",
+        "stop_location": "7.043, 79.958",
+        "stop_order": 1
+    }
+]

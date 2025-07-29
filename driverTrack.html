@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Driver Tracking – TrackMyBus.lk</title>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBylJ_h2gF61lVuPCOIDGvupcSnad5-1Hw" async defer></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f2f2f2;
+      color: #222;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #007bff;
+      padding: 10px 0;
+      border-radius: 0 0 10px 10px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 12px 20px;
+      font-size: 1rem;
+      margin: 0 15px;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    nav a:hover {
+      background-color: #0056b3;
+    }
+
+    .container {
+      max-width: 460px;
+      margin: 3rem auto;
+      background-color: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .app-heading {
+      font-size: 1.6rem;
+      margin-bottom: 1.2rem;
+      text-align: center;
+    }
+
+    .info-box {
+      margin: 0.5rem 0;
+      padding: 0.6rem 1rem;
+      background-color: #f8f8f8;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .app-button {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #007BFF;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-bottom: 10px;
+    }
+
+    .app-button:hover {
+      background-color: #0056b3;
+    }
+
+    .stop-button {
+      background-color: #dc3545;
+    }
+
+    .stop-button:hover {
+      background-color: #c82333;
+    }
+
+    .status {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    #map {
+      width: 100%;
+      height: 300px;
+      margin-top: 1rem;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navigation Bar -->
+  <nav>
+    <a href="Dhome.html">Home</a>
+    <a href="addBusAndRoute.html">Add Bus & Route</a>
+    <a href="driverTrack.html">Driver Track</a>
+  </nav>
+
+  <div class="container">
+    <h2 class="app-heading">Live GPS Sharing</h2>
+
+    <div class="info-box" id="userIdBox">User ID: loading...</div>
+    <div class="info-box" id="driverIdBox">Driver ID: loading...</div>
+    <div class="info-box" id="busIdBox">Bus ID: loading...</div>
+    <div class="info-box" id="routeIdBox">Route ID: loading...</div>
+
+    <button class="app-button" onclick="startTracking()" id="startBtn">Start Location Sharing</button>
+    <button class="app-button stop-button" onclick="stopTracking()" id="stopBtn" style="display:none;">Stop Sharing</button>
+
+    <div class="status" id="statusMessage">Waiting to start tracking...</div>
+    <div id="map"></div>
+  </div>
+
+  <script>
+    let trackingInterval;
+    let userId = "";
+    let driverId = "";
+    let busId = "";
+    let routeId = "";
+    let lastLat = null;
+    let lastLng = null;
+    let map;
+    let marker;
+
+    async function loadDriverInfo() {
+      userId = localStorage.getItem("userId");
+      if (!userId) {
+        alert("❌ User not logged in.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      document.getElementById("userIdBox").textContent = `User ID: ${userId}`;
+
+      try {
+        const res = await fetch(`/api/drivers/searchByUser?userId=${userId}`);
+        const data = await res.json();
+
+        if (!res.ok || !data.driver) throw new Error("Driver not found");
+
+        const driver = data.driver;
+        driverId = driver.driverId;
+        busId = driver.busId;
+        routeId = driver.routeId;
+
+        localStorage.setItem("driverId", driverId);
+        localStorage.setItem("busId", busId);
+        localStorage.setItem("routeId", routeId);
+
+        document.getElementById("driverIdBox").textContent = `Driver ID: ${driverId}`;
+        document.getElementById("busIdBox").textContent = `Bus ID: ${busId}`;
+        document.getElementById("routeIdBox").textContent = `Route ID: ${routeId}`;
+      } catch (err) {
+        alert("❌ Failed to fetch driver info.");
+        console.error(err);
+      }
+    }
+
+    function initMap(lat = 7.0, lng = 79.9) {
+      const location = { lat, lng };
+      map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 14,
+        center: location,
+      });
+      marker = new google.maps.Marker({ position: location, map });
+    }
+
+    function updateMap(lat, lng) {
+      const newPos = { lat, lng };
+      if (!map || !marker) {
+        initMap(lat, lng);
+      } else {
+        marker.setPosition(newPos);
+        map.setCenter(newPos);
+      }
+    }
+
+    function startTracking() {
+      if (!busId || !routeId || !userId || !driverId) {
+        alert("❌ Incomplete data to start tracking.");
+        return;
+      }
+
+      if (!navigator.geolocation) {
+        alert("❌ Geolocation not supported.");
+        return;
+      }
+
+      document.getElementById("statusMessage").textContent = "📡 Tracking started...";
+      document.getElementById("startBtn").style.display = 'none';
+      document.getElementById("stopBtn").style.display = 'block';
+
+      trackingInterval = setInterval(() => {
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+
+            if (lat === lastLat && lng === lastLng) return;
+
+            lastLat = lat;
+            lastLng = lng;
+
+            updateMap(lat, lng);
+
+            fetch("/api/location/update", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ userId, driverId, busId, routeId, lat, lng })
+            })
+              .then(res => res.json())
+              .then(data => console.log("✅ Location sent:", data))
+              .catch(err => console.error("❌ Location send failed:", err));
+          },
+          error => {
+            document.getElementById("statusMessage").textContent = "⚠️ GPS Error.";
+          }
+        );
+      }, 5000);
+    }
+
+    function stopTracking() {
+      clearInterval(trackingInterval);
+      document.getElementById("statusMessage").textContent = "⛔ Tracking stopped.";
+      document.getElementById("startBtn").style.display = 'block';
+      document.getElementById("stopBtn").style.display = 'none';
+    }
+
+    loadDriverInfo();
+    window.initMap = initMap; // ensure Google Maps can call it if needed
+  </script>
+</body>
+
+</html>
+
+
+

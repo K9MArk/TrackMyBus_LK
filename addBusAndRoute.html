@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save Driver Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin: 0 auto;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            background-color: #28a745;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        p {
+            font-weight: bold;
+        }
+
+        #addMsg {
+            color: green;
+        }
+
+        #errorMsg {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Save Driver Test</h2>
+        <form id="addDriverForm">
+            <input type="text" id="driverId" placeholder="Driver ID" required>
+            <input type="text" id="busId" placeholder="Bus ID" required>
+            <input type="text" id="routeId" placeholder="Route ID" required>
+            <button type="submit">Save Driver</button>
+        </form>
+
+        <p id="addMsg"></p>
+        <p id="errorMsg"></p>
+
+        <!-- Temporary Debugging: Show the fetched userId -->
+        <div>
+            <p>Fetched User ID (from localStorage): <span id="fetchedUserId">Not Available</span></p>
+        </div>
+    </div>
+
+    <script>
+        // Function to fetch userId from localStorage (assuming user has logged in)
+        function getUserIdFromLocalStorage() {
+            const userId = localStorage.getItem('userId');
+            document.getElementById('fetchedUserId').textContent = userId || 'Not Available';
+            return userId;
+        }
+
+        // Handle form submission
+        document.getElementById('addDriverForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const addMsg = document.getElementById('addMsg');
+            const errorMsg = document.getElementById('errorMsg');
+            addMsg.textContent = '';
+            errorMsg.textContent = '';
+
+            // Get the userId from localStorage
+            const userId = getUserIdFromLocalStorage();
+            if (!userId) {
+                errorMsg.textContent = "❌ User ID not available!";
+                return;
+            }
+
+            // Get the driver data from the form
+            const driverId = document.getElementById('driverId').value.trim();
+            const busId = document.getElementById('busId').value.trim();
+            const routeId = document.getElementById('routeId').value.trim();
+
+            if (!driverId || !busId || !routeId) {
+                errorMsg.textContent = "❌ Please fill in all required fields.";
+                return;
+            }
+
+            try {
+                // Prepare the new driver data
+                const newDriver = {
+                    driverId: driverId,
+                    userId: userId,  // Automatically taken from localStorage
+                    busId: busId,
+                    routeId: routeId,
+                    status: 'on_time', // Default status
+                    current_location: 'unknown', // Default location
+                    last_update: new Date()
+                };
+
+                // Send POST request to save the driver
+                const driverRes = await fetch('/api/drivers', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newDriver)
+                });
+
+                const driverResult = await driverRes.json();
+
+                if (!driverRes.ok) {
+                    errorMsg.textContent = "❌ Failed to add driver.";
+                    return;
+                }
+
+                addMsg.textContent = "✅ Driver added successfully!";
+                document.getElementById('addDriverForm').reset();
+
+            } catch (err) {
+                console.error(err);
+                errorMsg.textContent = "❌ Network or server error. Try again.";
+            }
+        });
+    </script>
+
+</body>
+</html>

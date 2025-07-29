@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Data View Page</title>
+
+<style> body { font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px; } table { width: 100%; border-collapse: collapse; margin-bottom: 20px; } th, td { padding: 8px; border: 1px solid #ddd; text-align: left; } th { background-color: #f2f2f2; } .edit-input { width: 100%; padding: 5px; margin-top: 5px; } .button { background-color: #007BFF; color: white; padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; } .button:hover { background-color: #0056b3; } .form-group { margin-top: 10px; } </style>
+</head>
+
+<body>
+
+    <h2>View Data</h2>
+
+    <!-- Users Table -->
+    <h3>Users Table</h3>
+    <table id="usersTable">
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Username</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- Routes Table -->
+    <h3>Routes Table</h3>
+    <table id="routesTable">
+        <thead>
+            <tr>
+                <th>Route ID</th>
+                <th>Route Name</th>
+                <th>Route Description</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- Stops Table -->
+    <h3>Stops Table</h3>
+    <table id="stopsTable">
+        <thead>
+            <tr>
+                <th>Stop ID</th>
+                <th>Route ID</th>
+                <th>Stop Name</th>
+                <th>Stop Location</th>
+                <th>Stop Order</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- Drivers Table -->
+    <h3>Drivers Table</h3>
+    <table id="driversTable">
+        <thead>
+            <tr>
+                <th>Driver ID</th>
+                <th>User ID</th>
+                <th>Bus ID</th>
+                <th>Route ID</th>
+                <th>Current Location</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- Bus Table -->
+    <h3>Bus Table</h3>
+    <table id="busesTable">
+        <thead>
+            <tr>
+                <th>Bus ID</th>
+                <th>Bus Number</th>
+                <th>Plate Number</th>
+                <th>Capacity</th>
+                <th>Model</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- Location History Table -->
+    <h3>Location History Table</h3>
+    <table id="historyTable">
+        <thead>
+            <tr>
+                <th>History ID</th>
+                <th>Driver ID</th>
+                <th>Bus ID</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        // Assuming these API endpoints exist to fetch data
+
+        const API_BASE = 'http://localhost:3000/api';
+
+        // Fetch all data and display in respective tables
+        async function fetchData() {
+            await fetchUsers();
+            await fetchRoutes();
+            await fetchStops();
+            await fetchDrivers();
+            await fetchBuses();
+            await fetchHistory();
+        }
+
+        // Fetch Users
+        async function fetchUsers() {
+            const res = await fetch(`${API_BASE}/users`);
+            const users = await res.json();
+            const usersTable = document.getElementById('usersTable').getElementsByTagName('tbody')[0];
+            usersTable.innerHTML = '';
+            users.forEach(user => {
+                const row = usersTable.insertRow();
+                row.innerHTML = `
+                    <td>${user.userId}</td>
+                    <td>${user.user_name}</td>
+                    <td>${user.full_name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.phone_number}</td>
+                    <td>${user.status}</td>
+                `;
+            });
+        }
+
+        // Fetch Routes
+        async function fetchRoutes() {
+            const res = await fetch(`${API_BASE}/routes`);
+            const routes = await res.json();
+            const routesTable = document.getElementById('routesTable').getElementsByTagName('tbody')[0];
+            routesTable.innerHTML = '';
+            routes.forEach(route => {
+                const row = routesTable.insertRow();
+                row.innerHTML = `
+                    <td>${route.routeId}</td>
+                    <td>${route.route_name}</td>
+                    <td>${route.route_description}</td>
+                `;
+            });
+        }
+
+        // Fetch Stops
+        async function fetchStops() {
+            const res = await fetch(`${API_BASE}/stops`);
+            const stops = await res.json();
+            const stopsTable = document.getElementById('stopsTable').getElementsByTagName('tbody')[0];
+            stopsTable.innerHTML = '';
+            stops.forEach(stop => {
+                const row = stopsTable.insertRow();
+                row.innerHTML = `
+                    <td>${stop.stopId}</td>
+                    <td>${stop.routeId}</td>
+                    <td>${stop.stop_name}</td>
+                    <td>${stop.stop_location}</td>
+                    <td>${stop.stop_order}</td>
+                `;
+            });
+        }
+
+        // Fetch Drivers
+        async function fetchDrivers() {
+            const res = await fetch(`${API_BASE}/drivers`);
+            const drivers = await res.json();
+            const driversTable = document.getElementById('driversTable').getElementsByTagName('tbody')[0];
+            driversTable.innerHTML = '';
+            drivers.forEach(driver => {
+                const row = driversTable.insertRow();
+                row.innerHTML = `
+                    <td>${driver.driverId}</td>
+                    <td>${driver.userId}</td>
+                    <td>${driver.busId}</td>
+                    <td>${driver.routeId}</td>
+                    <td>${driver.current_location}</td>
+                    <td>${driver.status}</td>
+                `;
+            });
+        }
+// Fetch Buses
+async function fetchBuses() {
+    try {
+        const res = await fetch(`${API_BASE}/buses`);
+        if (!res.ok) {
+            throw new Error('Failed to fetch buses');
+        }
+
+        const buses = await res.json();
+        const busesTable = document.getElementById('busesTable').getElementsByTagName('tbody')[0];
+        busesTable.innerHTML = '';  // Clear the table before inserting new rows
+
+        buses.forEach(bus => {
+            const row = busesTable.insertRow();
+            row.innerHTML = `
+                <td>${bus.busId}</td>
+                <td>${bus.bus_number}</td>
+                <td>${bus.plate_number}</td>
+                <td>${bus.capacity}</td>
+                <td>${bus.model}</td>
+            `;
+        });
+    } catch (error) {
+        console.error(error);
+        alert('There was an error loading the bus data.');
+    }
+}
+
+
+        // Fetch Location History
+        async function fetchHistory() {
+            const res = await fetch(`${API_BASE}/history`);
+            const history = await res.json();
+            const historyTable = document.getElementById('historyTable').getElementsByTagName('tbody')[0];
+            historyTable.innerHTML = '';
+            history.forEach(record => {
+                const row = historyTable.insertRow();
+                row.innerHTML = `
+                    <td>${record.historyId}</td>
+                    <td>${record.driverId}</td>
+                    <td>${record.busId}</td>
+                    <td>${record.latitude}</td>
+                    <td>${record.longitude}</td>
+                    <td>${record.timestamp}</td>
+                `;
+            });
+        }
+
+        // Load data on page load
+        window.onload = fetchData;
+    </script>
+
+</body>
+
+</html>

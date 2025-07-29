@@ -1,0 +1,15 @@
+[
+    {
+        "userId": "user1_uid",
+        "user_name": "ali.khan",
+        "full_name": "Ali Khan",
+        "email": "ali.khan@gmail.com",
+        "password": "$2b$10$hashedvalue...",
+        "phone_number": "+94771234567",
+        "profile_picture": "https://.../ali.jpg",
+        "role": "customer",
+        "status": "active",
+        "createdAt": "2025-07-19T10:00:00Z",
+        "updatedAt": "2025-07-19T10:00:00Z"
+    }
+]

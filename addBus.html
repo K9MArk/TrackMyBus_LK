@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Bus - TrackMyBus.lk</title>
+    <style>
+        /* Reset some basic styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #007bff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        /* Navigation Bar */
+        nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #007bff;
+            padding: 10px 0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            margin: 0 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: #0056b3;
+        }
+
+        /* Container for content */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        input,
+        select,
+        button {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        #addMsg,
+        #errorMsg {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        #addMsg {
+            color: green;
+        }
+
+        #errorMsg {
+            color: red;
+        }
+
+        /* Display Bus Details */
+        .bus-details {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="Dhome.html">Home</a>
+        <a href="addBus.html">Add Bus</a>
+        <a href="driverTrack.html">Driver Track</a>
+        <a href="addRouting.html">Add Routing</a>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1>Add New Bus</h1>
+        <form id="addBusForm">
+            <!-- Bus Number -->
+            <div class="form-group">
+                <input type="text" id="busNumber" placeholder="Bus Number" required />
+            </div>
+
+            <!-- Plate Number -->
+            <div class="form-group">
+                <input type="text" id="plateNumber" placeholder="Plate Number" required />
+            </div>
+
+            <!-- Bus Capacity -->
+            <div class="form-group">
+                <input type="number" id="capacity" placeholder="Capacity" required />
+            </div>
+
+            <!-- Bus Model -->
+            <div class="form-group">
+                <input type="text" id="busModel" placeholder="Bus Model" required />
+            </div>
+
+            <button type="submit">Add Bus</button>
+
+            <p id="addMsg"></p>
+            <p id="errorMsg"></p>
+        </form>
+
+        <!-- Display the added Bus details -->
+        <div class="bus-details" id="busDetails" style="display: none;">
+            <h2>Bus Details</h2>
+            <p><strong>Bus Number:</strong> <span id="busNumberDisplay"></span></p>
+            <p><strong>Plate Number:</strong> <span id="plateNumberDisplay"></span></p>
+            <p><strong>Capacity:</strong> <span id="capacityDisplay"></span></p>
+            <p><strong>Model:</strong> <span id="busModelDisplay"></span></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('addBusForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const addMsg = document.getElementById('addMsg');
+            const errorMsg = document.getElementById('errorMsg');
+            addMsg.textContent = '';
+            errorMsg.textContent = '';
+
+            const busNumber = document.getElementById('busNumber').value.trim();
+            const plateNumber = document.getElementById('plateNumber').value.trim();
+            const capacity = document.getElementById('capacity').value.trim();
+            const busModel = document.getElementById('busModel').value.trim();
+
+            if (!busNumber || !plateNumber || !capacity || !busModel) {
+                errorMsg.textContent = "❌ Please fill in all required fields.";
+                return;
+            }
+
+            try {
+                // Step 1: Check if the user has already added a bus
+                const userBus = await fetch(`/api/buses/search?plate_number=${plateNumber}`);
+                const busData = await userBus.json();
+
+                if (busData.length > 0) {
+                    errorMsg.textContent = "❌ You have already added a bus with this plate number.";
+                    return;
+                }
+
+                // Step 2: Add new bus to the database
+                const newBus = {
+                    bus_number: busNumber,
+                    plate_number: plateNumber,
+                    capacity: Number(capacity),
+                    model: busModel,
+                };
+
+                const res = await fetch('/api/buses', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newBus),
+                });
+
+                const result = await res.json();
+
+                if (!res.ok) {
+                    errorMsg.textContent = "❌ " + (result.error || "Failed to add new bus");
+                    return;
+                }
+
+                addMsg.textContent = "✅ Bus added successfully!";
+                document.getElementById('addBusForm').reset();
+
+                // Display the added bus details
+                document.getElementById('busNumberDisplay').textContent = busNumber;
+                document.getElementById('plateNumberDisplay').textContent = plateNumber;
+                document.getElementById('capacityDisplay').textContent = capacity;
+                document.getElementById('busModelDisplay').textContent = busModel;
+                document.getElementById('busDetails').style.display = 'block'; // Show bus details section
+
+            } catch (err) {
+                console.error(err);
+                errorMsg.textContent = "❌ Network or server error. Try again.";
+            }
+        });
+    </script>
+
+</body>
+
+</html>

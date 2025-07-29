@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TrackMyBus LK</title>
+<style>
+  /* Reset */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  body, html {
+    margin: 0; padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #c2e9fb 0%, #a1c4fd 100%);
+    color: #0a2142;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* Header */
+  header.app-bar {
+    padding: 20px;
+    text-align: center;
+    background: rgba(255 255 255 / 0.7);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+    user-select: none;
+    flex-shrink: 0;
+  }
+  header.app-bar h1 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.6rem;
+  }
+  header.app-bar p {
+    margin: 6px 0 0;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: #3166cc;
+  }
+
+  /* Main container */
+  main.app-container {
+    flex: 1 0 auto;
+    width: 90%;
+    max-width: 420px;
+    margin: 20px auto 30px;
+    display: grid;
+    grid-template-rows: auto auto;
+    gap: 24px;
+  }
+
+  /* Animation and welcome message container */
+  .animation-welcome {
+    display: flex;
+    background: rgba(255 255 255 / 0.6);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 8px 30px rgb(26 84 170 / 0.15);
+    align-items: center;
+    gap: 14px;
+  }
+  .animation-welcome img {
+    width: 140px;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgb(26 90 230 / 0.5);
+    flex-shrink: 0;
+  }
+  .welcome-text {
+    flex: 1;
+    font-size: 1rem;
+    color: #0b2a68;
+    font-weight: 600;
+  }
+
+  /* Buttons container */
+  .buttons {
+    display: grid;
+    gap: 16px;
+  }
+
+  /* Each button */
+  .btn-link {
+    all: unset;
+    cursor: pointer;
+    background: rgba(198 220 255 / 0.5);
+    backdrop-filter: blur(18px);
+    border-radius: 14px;
+    padding: 20px 24px;
+    box-shadow: 0 6px 18px rgb(45 105 240 / 0.3);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: #0a2142;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-align: left;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .btn-link:hover, .btn-link:focus {
+    background: rgba(173 198 252 / 0.7);
+    box-shadow: 0 8px 28px rgb(45 105 240 / 0.5);
+    outline: none;
+  }
+
+  /* Icon circle in button */
+  .btn-icon {
+    flex-shrink: 0;
+    background: #3b6fd1;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 4px 12px rgb(52 96 204 / 0.7);
+  }
+  .btn-icon svg {
+    width: 26px;
+    height: 26px;
+    fill: white;
+  }
+
+  /* Button text */
+  .btn-text {
+    display: flex;
+    flex-direction: column;
+  }
+  .btn-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+  }
+  .btn-desc {
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: #224a9a;
+  }
+
+  /* Footer */
+  footer.app-footer {
+    flex-shrink: 0;
+    text-align: center;
+    font-weight: 600;
+    color: #0a2142;
+    font-size: 0.8rem;
+    margin: 0 auto 20px;
+    max-width: 420px;
+    user-select: none;
+  }
+  .footer-links {
+    margin-top: 8px;
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+  }
+  .footer-links a {
+    color: #3166cc;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .footer-links a:hover,
+  .footer-links a:focus {
+    text-decoration: underline;
+    outline: none;
+  }
+</style>
+</head>
+<body>
+
+<header class="app-bar" role="banner">
+  <h1>TrackMyBus LK</h1>
+  <p>Your Journey. Live.</p>
+</header>
+
+<main class="app-container" role="main" aria-label="TrackMyBus LK main landing page">
+
+  <section class="animation-welcome" aria-label="2d animation with welcome message">
+    <img src="welcome.gif" alt="Welcome 2d animation GIF" />
+    <div class="welcome-text">
+      Welcome to TrackMyBus LK! We help you find real-time buses and track your rides live across Sri Lanka.
+    </div>
+  </section>
+
+  <section class="buttons" aria-label="User role selection buttons">
+    <a href="passengerSearch.html" class="btn-link" aria-label="Passenger - Search routes and track your bus">
+      <div class="btn-icon" aria-hidden="true">
+        <!-- Passenger icon -->
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" >
+          <path d="M18 11V6a4 4 0 0 0-8 0v5H5v6h14v-6h-1zm-6 6a2 2 0 1 1 4 0 2 2 0 0 1-4 0zM7 18a2 2 0 1 0 4 0 2 2 0 0 0-4 0z"/>
+        </svg>
+      </div>
+      <div class="btn-text">
+        <div class="btn-title">Passenger</div>
+        <div class="btn-desc">Search routes and track your bus</div>
+      </div>
+    </a>
+
+    <a href="driverLogin.html" class="btn-link" aria-label="Driver - Access your driver dashboard">
+      <div class="btn-icon" aria-hidden="true">
+        <!-- Driver icon -->
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" >
+          <path d="M12 2a10 10 0 0 0-9.95 11.14A9.98 9.98 0 0 0 12 22a10 10 0 0 0 9.95-11.14A9.98 9.98 0 0 0 12 2zm0 18a8 8 0 0 1-7.75-6h15.5A8 8 0 0 1 12 20zm0-14a7.95 7.95 0 0 1 5.65 2.34L12 11V6zm0 0v5l-5.65-4.66A7.95 7.95 0 0 1 12 6z"/>
+        </svg>
+      </div>
+      <div class="btn-text">
+        <div class="btn-title">Driver</div>
+        <div class="btn-desc">Access your driver dashboard</div>
+      </div>
+    </a>
+  </section>
+
+</main>
+
+<footer class="app-footer" role="contentinfo">
+  <div>Powered by TrackMyBus Devs</div>
+  <nav class="footer-links" aria-label="Footer navigation">
+    <a href="#" tabindex="0">About</a>
+    <a href="#" tabindex="0">Help</a>
+    <a href="#" tabindex="0">Privacy Policy</a>
+  </nav>
+</footer>
+
+</body>
+</html>

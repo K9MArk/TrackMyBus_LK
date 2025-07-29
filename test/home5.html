@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body id="home-body">
+    <h1 id="welcome-message"></h1>
+
+    <p id="intro-text"></p>
+
+    <a href="settings5.html">Go to Settings</a>
+
+    <script>
+        // Retrieve settings from localStorage
+        const language = localStorage.getItem('preferredLanguage') || 'en';
+        const bgColor = localStorage.getItem('bgColor') || '#ffffff';
+        const fontColor = localStorage.getItem('fontColor') || '#000000';
+
+        // Set background and font color based on user settings
+        document.getElementById('home-body').style.backgroundColor = bgColor;
+        document.getElementById('home-body').style.color = fontColor;
+
+        // Set the text content based on the selected language
+        const texts = {
+            en: {
+                welcome_message: "Welcome to the Bus Tracking System",
+                intro_text: "This system allows you to track buses in real-time, view routes, and book seats."
+            },
+            si: {
+                welcome_message: "බස් ට්‍රැකින් පද්ධතියට පිළිගනිමු",
+                intro_text: "මෙම පද්ධතිය මගින් ඔබට බස් ට්‍රැක් කිරීමට, මාර්ග දැක්වීමට සහ අසුන වෙන් කිරීමට හැකිවනු ඇත."
+            }
+        };
+
+        // Apply the text based on the language selection
+        document.getElementById('welcome-message').innerText = texts[language].welcome_message;
+        document.getElementById('intro-text').innerText = texts[language].intro_text;
+    </script>
+</body>
+</html>

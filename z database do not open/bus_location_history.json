@@ -1,0 +1,10 @@
+[
+    {
+        "historyId": "his_001",
+        "driverId": "driver1_uid",
+        "busId": "bus_101",
+        "latitude": 7.005,
+        "longitude": 79.92,
+        "timestamp": "2025-07-19T11:35:00Z"
+    }
+]

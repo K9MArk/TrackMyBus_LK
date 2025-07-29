@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Find Buses - TrackMyBus.lk</title>
+
+  <style>
+    body.app-background {
+      background-color: #f5f5f5;
+      font-family: 'Segoe UI', sans-serif;
+      color: #222;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 420px;
+      width: 90%;
+      padding: 2rem;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .app-heading {
+      font-size: 1.8rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .form-box {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .input-box, .select-box {
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .input-box:focus, .select-box:focus {
+      border-color: #007bff;
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-top: 0.5rem;
+    }
+
+    .app-button {
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .app-button.primary {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .app-button.secondary {
+      background-color: #e0e0e0;
+      color: #333;
+    }
+
+    .app-button:hover {
+      opacity: 0.9;
+    }
+
+    .result-box {
+      text-align: left;
+    }
+
+    .bus-card {
+      background-color: #f0f0f0;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .bus-card h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .bus-card p {
+      margin: 0.25rem 0 0.5rem;
+    }
+
+    .bus-card .app-button {
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body class="app-background">
+  <div class="container">
+    <h2 class="app-heading">TrackMyBus LK - Passenger</h2>
+
+    <form id="searchForm" class="form-box">
+      <select id="routeSelect" class="select-box">
+        <option value="">-- Select Route --</option>
+      </select>
+      <div class="button-group">
+        <button type="submit" class="app-button primary">Find Buses</button>
+        <button type="button" class="app-button secondary" onclick="findNearestHalts()">Nearest Halts</button>
+      </div>
+    </form>
+
+    <div id="busResults" class="result-box"></div>
+  </div>
+
+  <script>
+  window.onload = async function () {
+    const selectBox = document.getElementById("routeSelect");
+
+    try {
+      const res = await fetch("/api/routes/all");
+      const routes = await res.json();
+
+      const unique = {};
+      routes.forEach(route => {
+        if (!unique[route.route_name]) {
+          const option = document.createElement("option");
+          option.value = route.routeId;  // still use routeId internally
+          option.textContent = route.route_name;
+          selectBox.appendChild(option);
+          unique[route.route_name] = true;
+        }
+      });
+    } catch (err) {
+      console.error("Failed to load routes:", err);
+    }
+  };
+
+  document.getElementById("searchForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const routeId = document.getElementById("routeSelect").value;
+    if (!routeId) return;
+
+    try {
+      const resultBox = document.getElementById("busResults");
+      resultBox.innerHTML = '';
+
+      // Step 1: Get route details
+      const routeRes = await fetch(`/api/routes/byId?routeId=${encodeURIComponent(routeId)}`);
+      const route = await routeRes.json();
+
+      if (!route || !route.route_name) {
+        resultBox.innerHTML = `<p>No route data found.</p>`;
+        return;
+      }
+
+      // Step 2: Get all buses for this route
+      const busRes = await fetch(`/api/buses/byRoute?routeId=${encodeURIComponent(routeId)}`);
+      const buses = await busRes.json();
+
+      if (!Array.isArray(buses) || buses.length === 0) {
+        resultBox.innerHTML = `<p>No buses found on this route.</p>`;
+        return;
+      }
+
+      // Step 3: Render bus cards
+      buses.forEach(bus => {
+        const card = document.createElement("div");
+        card.className = "bus-card";
+        card.innerHTML = `
+          <h3>${route.route_name}</h3>
+          <p>Description: ${route.route_description || 'No description available'}</p>
+          <p><strong>Bus #</strong>: ${bus.bus_number}</p>
+          <p><strong>Plate</strong>: ${bus.plate_number}</p>
+          <button class="app-button secondary" onclick="trackOnMap('${bus._id}')">Track on Map</button>
+        `;
+        resultBox.appendChild(card);
+      });
+
+    } catch (err) {
+      console.error("Error loading route or buses:", err);
+      alert("Something went wrong.");
+    }
+  });
+
+  function trackOnMap(busId) {
+    window.location.href = `passengerMap.html?busId=${busId}`;
+  }
+
+  function findNearestHalts() {
+    alert("Nearest halts feature is under development.");
+  }
+</script>
+
+</body>
+</html>

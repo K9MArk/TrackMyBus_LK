@@ -1,0 +1,11 @@
+[
+    {
+        "driverId": "driver1_uid",
+        "userId": "user1_uid",
+        "busId": "bus_101",
+        "routeId": "route_120",
+        "current_location": "Kiribathgoda",
+        "status": "on_time",
+        "last_update": "2025-07-19T11:30:00Z"
+    }
+]

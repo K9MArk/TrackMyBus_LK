@@ -1,0 +1,23 @@
+INSERT INTO users (name, email, phone_number, profile_picture, role)
+VALUES ('John Doe', 'john@example.com', '1234567890', 'http://example.com/profile.jpg', 'passenger');
+
+
+
+UPDATE users
+SET name = 'Johnathan Doe', email = 'johnathan@example.com', profile_picture = 'http://example.com/new_profile.jpg'
+WHERE user_id = 1;
+
+
+UPDATE buses
+SET current_location = POINT(6.9271, 79.8612), status = 'on_time', last_updated = CURRENT_TIMESTAMP
+WHERE bus_id = 1;
+
+
+
+INSERT INTO stops (route_id, stop_name, location, arrival_time)
+VALUES (1, 'New Stop', POINT(6.9285, 79.8600), '10:15:00');
+
+
+
+INSERT INTO notifications (user_id, message, type, status)
+VALUES (1, 'Your bus is 5 minutes away.', 'arrival', 'unread');

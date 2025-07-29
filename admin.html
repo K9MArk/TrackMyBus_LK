@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel – TrackMyBus.lk</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      color: #222;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 2rem;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    }
+
+    .app-heading {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 1.5rem;
+    }
+
+    .tab-button {
+      padding: 10px 18px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .tab-button.active {
+      background-color: #0056b3;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.6rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .app-button {
+      margin-top: 10px;
+      padding: 0.75rem;
+      width: 100%;
+      background-color: #007BFF;
+      color: white;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .app-button:hover {
+      background-color: #0056b3;
+    }
+
+    .result {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: green;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h2 class="app-heading">Admin Panel – TrackMyBus.lk</h2>
+
+    <!-- Tab Navigation -->
+    <div class="tabs">
+      <button class="tab-button active" onclick="switchTab('routes')">Routes</button>
+      <button class="tab-button" onclick="switchTab('stops')">Bus Stops</button>
+      <button class="tab-button" onclick="switchTab('drivers')">Driver Assign</button>
+    </div>
+
+    <!-- ROUTES -->
+    <div class="tab-content active" id="routes">
+      <div class="form-group">
+        <label for="routeName">Route Name</label>
+        <input type="text" id="routeName" placeholder="e.g., Kadawatha - Colombo" />
+      </div>
+
+      <div class="form-group">
+        <label for="routeDescription">Route Description</label>
+        <textarea id="routeDescription" placeholder="e.g., Express route through expressway"></textarea>
+      </div>
+
+      <button class="app-button" onclick="addRoute()">Add Route</button>
+      <div class="result" id="routeResult"></div>
+    </div>
+
+    <!-- STOPS -->
+    <div class="tab-content" id="stops">
+      <div class="form-group">
+        <label for="stopRoute">Route ID</label>
+        <input type="text" id="stopRoute" placeholder="e.g., route_120" />
+      </div>
+
+      <div class="form-group">
+        <label for="stopName">Stop Name</label>
+        <input type="text" id="stopName" placeholder="e.g., Fort Halt" />
+      </div>
+
+      <div class="form-group">
+        <label for="stopLocation">Location (lat,lng)</label>
+        <input type="text" id="stopLocation" placeholder="e.g., 6.934, 79.848" />
+      </div>
+
+      <div class="form-group">
+        <label for="stopOrder">Stop Order</label>
+        <input type="number" id="stopOrder" placeholder="e.g., 1" />
+      </div>
+
+      <button class="app-button" onclick="addStop()">Add Stop</button>
+      <div class="result" id="stopResult"></div>
+    </div>
+
+    <!-- DRIVERS -->
+    <div class="tab-content" id="drivers">
+      <div class="form-group">
+        <label for="driverUserId">Driver User ID</label>
+        <input type="text" id="driverUserId" placeholder="e.g., driver1_uid" />
+      </div>
+
+      <div class="form-group">
+        <label for="driverBusId">Bus ID</label>
+        <input type="text" id="driverBusId" placeholder="e.g., bus_101" />
+      </div>
+
+      <div class="form-group">
+        <label for="driverRouteId">Route ID</label>
+        <input type="text" id="driverRouteId" placeholder="e.g., route_120" />
+      </div>
+
+      <button class="app-button" onclick="assignDriver()">Assign Driver</button>
+      <div class="result" id="driverResult"></div>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll(".tab-button").forEach(btn => btn.classList.remove("active"));
+      document.querySelectorAll(".tab-content").forEach(div => div.classList.remove("active"));
+      document.querySelector(`[onclick*="${tabId}"]`).classList.add("active");
+      document.getElementById(tabId).classList.add("active");
+    }
+
+    function addRoute() {
+      const name = document.getElementById("routeName").value.trim();
+      const desc = document.getElementById("routeDescription").value.trim();
+
+      if (!name || !desc) return alert("All fields are required");
+
+      fetch("/api/admin/addRoute", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ route_name: name, route_description: desc })
+      }).then(res => res.json()).then(data => {
+        document.getElementById("routeResult").textContent = "Route added successfully!";
+      });
+    }
+
+    function addStop() {
+      const routeId = document.getElementById("stopRoute").value.trim();
+      const stopName = document.getElementById("stopName").value.trim();
+      const location = document.getElementById("stopLocation").value.trim();
+      const order = parseInt(document.getElementById("stopOrder").value.trim());
+
+      if (!routeId || !stopName || !location || isNaN(order)) return alert("All fields are required");
+
+      const [lat, lng] = location.split(',').map(Number);
+
+      fetch("/api/admin/addStop", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          routeId, stop_name: stopName,
+          stop_location: `${lat}, ${lng}`, stop_order: order
+        })
+      }).then(res => res.json()).then(data => {
+        document.getElementById("stopResult").textContent = "Stop added successfully!";
+      });
+    }
+
+    function assignDriver() {
+      const userId = document.getElementById("driverUserId").value.trim();
+      const busId = document.getElementById("driverBusId").value.trim();
+      const routeId = document.getElementById("driverRouteId").value.trim();
+
+      if (!userId || !busId || !routeId) return alert("All fields are required");
+
+      fetch("/api/admin/assignDriver", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, busId, routeId })
+      }).then(res => res.json()).then(data => {
+        document.getElementById("driverResult").textContent = "Driver assigned successfully!";
+      });
+    }
+  </script>
+
+</body>
+</html>

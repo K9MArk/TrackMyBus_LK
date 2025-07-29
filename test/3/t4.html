@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Registration - TrackMyBus</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 30px;
+    }
+
+    h2 {
+      color: #007BFF;
+    }
+
+    form, .search-section {
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      max-width: 500px;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    button {
+      background-color: #28a745;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    #addMsg, #errorMsg {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    #addMsg {
+      color: green;
+    }
+
+    #errorMsg {
+      color: red;
+    }
+
+    pre {
+      background: #eee;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Add New User</h2>
+  <form id="userForm">
+    <input type="text" id="username" placeholder="Username (e.g., ali.khan)" required>
+    <input type="password" id="password" placeholder="Password (min 6 chars)" required>
+    <input type="text" id="fullname" placeholder="Full Name" required>
+    <input type="email" id="email" placeholder="Email Address" required>
+    <input type="text" id="phone" placeholder="Phone Number">
+    <input type="text" id="profilePic" placeholder="Profile Picture URL">
+
+    <select id="role" required>
+      <option value="">Select Role</option>
+      <option value="admin">Admin</option>
+      <option value="driver">Driver</option>
+      <option value="customer">Customer</option>
+    </select>
+
+    <button type="submit">Add User</button>
+    <p id="addMsg"></p>
+    <p id="errorMsg"></p>
+  </form>
+
+  <h2>Search User by Username</h2>
+  <div class="search-section">
+    <input type="text" id="searchName" placeholder="Enter username...">
+    <button onclick="searchUser()">Search</button>
+    <pre id="searchResult"></pre>
+  </div>
+
+  <script>
+    document.getElementById('userForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const addMsg = document.getElementById('addMsg');
+      const errorMsg = document.getElementById('errorMsg');
+      addMsg.textContent = '';
+      errorMsg.textContent = '';
+
+      const user_name = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const full_name = document.getElementById('fullname').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone_number = document.getElementById('phone').value.trim();
+      const profile_picture = document.getElementById('profilePic').value.trim();
+      const role = document.getElementById('role').value.trim();
+
+      // Client-side validation
+      if (!user_name || !password || !full_name || !email || !role) {
+        errorMsg.textContent = "❌ Required fields missing. Please fill all mandatory fields.";
+        return;
+      }
+      if (password.length < 6) {
+        errorMsg.textContent = "❌ Password must be at least 6 characters.";
+        return;
+      }
+      if (!["admin", "driver", "customer"].includes(role)) {
+        errorMsg.textContent = "❌ Invalid role selected.";
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user_name, password, full_name, email, phone_number, profile_picture, role
+          })
+        });
+
+        const result = await res.json();
+        if (res.ok) {
+          addMsg.textContent = result.message || "✅ User added!";
+          document.getElementById('userForm').reset();
+        } else {
+          errorMsg.textContent = "❌ " + (result.error || "Server error occurred.");
+        }
+      } catch (err) {
+        errorMsg.textContent = "❌ Network or server error. Try again.";
+      }
+    });
+
+    async function searchUser() {
+      const name = document.getElementById('searchName').value.trim();
+      const resultEl = document.getElementById('searchResult');
+      if (!name) return alert("Please enter a username to search.");
+      try {
+        const res = await fetch(`/api/users/search?username=${name}`);
+        const user = await res.json();
+        if (res.ok) {
+          resultEl.textContent = JSON.stringify(user, null, 2);
+        } else {
+          resultEl.textContent = "❌ " + (user.error || "User not found.");
+        }
+      } catch {
+        resultEl.textContent = "❌ Network or server error during search.";
+      }
+    }
+  </script>
+
+</body>
+</html>

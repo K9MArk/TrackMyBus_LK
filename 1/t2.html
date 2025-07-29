@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Two-Lane Two-Way Road</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      overflow: hidden;
+      background:  rgb(197, 143, 143);
+    }
+
+    .road-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .road {
+      position: absolute;
+      height: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
+    }
+
+    .car {
+      position: absolute;
+      width: 28px;
+      z-index: 2;
+    }
+
+    /* LANE POSITIONS */
+    .lane-up { left: 46.5%; }   /* left lane */
+    .lane-down {
+      left: 48.9%;
+      transform: rotate(180deg); /* face down */
+    }
+
+    /* Animations */
+    .lane-up {
+      animation: drive-up linear infinite;
+    }
+
+    .lane-down {
+      animation: drive-down linear infinite;
+    }
+
+    @keyframes drive-up {
+      0%   { top: 100%; }
+      100% { top: -60px; }
+    }
+
+    @keyframes drive-down {
+      0%   { top: -60px; }
+      100% { top: 100%; }
+    }
+
+
+
+    .top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 62px;
+      background: white;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar"></div>
+  <div class="road-container">
+    <img src="road1.png" class="road" alt="Road">
+
+    <!-- UP (left lane) -->
+    <img src="car1.png" class="car lane-up" style="animation-duration:  10s; animation-delay: 0s;">
+    <img src="car2.png" class="car lane-up" style="animation-duration: 10s; animation-delay: 3s;">
+    <img src="car3.png" class="car lane-up" style="animation-duration:10s; animation-delay: 6s;">
+
+    <!-- DOWN (right lane) -->
+    <img src="car4.png" class="car lane-down" style="animation-duration: 10s; animation-delay: 2s;">
+    <img src="car5.png" class="car lane-down" style="animation-duration: 10s; animation-delay: 4s;">
+    <img src="car6.png" class="car lane-down" style="animation-duration: 10s; animation-delay: 7s;">
+    <img src="car7.png" class="car lane-down" style="animation-duration: 10s; animation-delay: 1s;">
+  </div>
+</body>
+</html>

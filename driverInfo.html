@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Driver Guidelines – TrackMyBus.lk</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+      padding: 1rem;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background-color: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    }
+
+    .app-heading {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .info-list {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    .info-card {
+      background-color: #f9f9f9;
+      border-left: 6px solid #007BFF;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .info-card h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+      color: #007BFF;
+    }
+
+    .info-card p {
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .app-button {
+      display: block;
+      width: 100%;
+      margin-top: 2rem;
+      padding: 0.8rem;
+      font-size: 1rem;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .app-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h2 class="app-heading">Driver Safety & App Guidelines</h2>
+
+    <ul class="info-list">
+
+      <li class="info-card">
+        <h3>📍 Enable Live Location</h3>
+        <p>Keep GPS turned on during your shift. Passengers rely on real-time location to catch your bus.</p>
+      </li>
+
+      <li class="info-card">
+        <h3>🛣️ Follow Assigned Routes</h3>
+        <p>Always drive on your registered route and follow the timetable. Sudden detours confuse passengers.</p>
+      </li>
+
+      <li class="info-card">
+        <h3>⏰ Update Tracking Timely</h3>
+        <p>Use the "Start Location Sharing" button at the beginning of your journey. Stop tracking once you finish.</p>
+      </li>
+
+      <li class="info-card">
+        <h3>🚦 Obey Traffic Rules</h3>
+        <p>Maintain road safety at all times. Avoid speeding, overtaking recklessly, or using your phone while driving.</p>
+      </li>
+
+      <li class="info-card">
+        <h3>👥 Respect Passengers</h3>
+        <p>Greet passengers kindly, give priority to elderly or disabled, and ensure smooth boarding/deboarding.</p>
+      </li>
+
+      <li class="info-card">
+        <h3>🔋 Keep Devices Charged</h3>
+        <p>Ensure your device used for GPS tracking is charged throughout the journey. Carry a power bank if needed.</p>
+      </li>
+
+    </ul>
+
+    <button class="app-button" onclick="goToTracking()">Go to GPS Tracking</button>
+  </div>
+
+  <script>
+    function goToTracking() {
+      window.location.href = "driverTrack.html";
+    }
+  </script>
+
+</body>
+</html>
