@@ -1,175 +1,247 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Driver Login - TrackMyBus</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            padding: 30px;
-            text-align: center;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Driver Login - TrackMyBus</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom, #05668D, #00A896);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      color: #333;
+    }
 
-        h2 {
-            color: #007BFF;
-        }
+    h2 {
+      color: #fff;
+      margin-top: 40px;
+    }
 
-        .tabs {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
+    .tabs {
+      display: flex;
+      margin-top: 20px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
-        .tab {
-            padding: 10px 20px;
-            margin: 0 10px;
-            background-color: #eee;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+    .tab {
+      padding: 10px 15px;
+      background: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #05668D;
+      transition: background 0.3s;
+    }
 
-        .tab.active {
-            background-color: #007BFF;
-            color: white;
-        }
+    .tab.active {
+      background: #FFD700;
+      color: black;
+    }
 
-        .login-box {
-            background: white;
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            display: none;
-        }
+    .login-box {
+      display: none;
+      flex-direction: column;
+      background: white;
+      padding: 20px;
+      margin-top: 20px;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
 
-        .login-box.active {
-            display: block;
-        }
+    .login-box.active {
+      display: flex;
+    }
 
-        input,
-        button {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            font-size: 14px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
+    .login-box input {
+      margin-bottom: 12px;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
 
-        button {
-            background-color: #28a745;
-            color: white;
-            cursor: pointer;
-        }
+    .login-box button {
+      padding: 10px;
+      background-color: #FFD700;
+      color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
 
-        button:hover {
-            background-color: #218838;
-        }
+    .login-box button:hover {
+      background-color: #e6c200;
+    }
 
-        #errorMsg {
-            color: red;
-            font-weight: bold;
-        }
+    #errorMsg {
+      color: red;
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
 
-        .google-btn {
-            background-color: #db4437;
-        }
-    </style>
+    .signup-text {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 0.95rem;
+      color: #444;
+    }
+
+    .signup-text a {
+      color: #05668D;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .signup-text a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 500px) {
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      .tab {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <h2>Driver Login - TrackMyBus</h2>
 
-    <h2>Driver Login - TrackMyBus</h2>
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('passwordLogin')">Username & Password</div>
+    <div class="tab" onclick="showTab('otpLogin')">OTP Login</div>
+    <div class="tab" onclick="showTab('googleLogin')">Google Sign-In</div>
+  </div>
 
-    <div class="tabs">
-        <div class="tab active" onclick="showTab('passwordLogin')">Username & Password</div>
-        <div class="tab" onclick="showTab('otpLogin')">OTP Login</div>
-        <div class="tab" onclick="showTab('googleLogin')">Google Sign-In</div>
+  <!-- Username & Password Login -->
+  <div class="login-box active" id="passwordLogin">
+    <form id="loginForm">
+      <input type="text" id="username" placeholder="Username" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+    <p id="errorMsg"></p>
+    <div class="signup-text">
+      Don't have an account? <a href="driversignup.html">Sign up</a>
     </div>
+  </div>
 
-    <!-- Username & Password Login -->
-    <div class="login-box active" id="passwordLogin">
-        <form id="loginForm">
-            <input type="text" id="username" placeholder="Username" required>
-            <input type="password" id="password" placeholder="Password" required>
-            <button type="submit">Login</button>
-        </form>
-        <p id="errorMsg"></p>
-    </div>
+  <!-- OTP Login -->
+  <div class="login-box" id="otpLogin">
+    <input type="text" id="otpPhone" placeholder="Enter phone number" />
+    <button onclick="sendOtp()">Send OTP</button>
+    <input type="text" id="otpCode" placeholder="Enter OTP" />
+    <button onclick="verifyOtp()">Verify OTP</button>
+  </div>
 
-    <!-- OTP Login -->
-    <div class="login-box" id="otpLogin">
-        <input type="text" id="otpPhone" placeholder="Enter phone number" />
-        <button onclick="sendOtp()">Send OTP</button>
-        <input type="text" id="otpCode" placeholder="Enter OTP" />
-        <button onclick="verifyOtp()">Verify OTP</button>
-    </div>
+  <!-- Google Login -->
+  <div class="login-box" id="googleLogin">
+    <button class="google-btn" onclick="googleLogin()">Sign in with Google</button>
+  </div>
 
-    <!-- Google Login -->
-    <div class="login-box" id="googleLogin">
-        <button class="google-btn" onclick="googleLogin()">Sign in with Google</button>
-    </div>
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
 
-    <script>
-        function showTab(id) {
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.login-box').forEach(box => box.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.querySelector(`[onclick="showTab('${id}')"]`).classList.add('active');
+    const firebaseConfig = {
+      apiKey: "AIzaSyAalfVG-12m72vwjYnr7IjAc0IwMCGlhY4",
+      authDomain: "busdriverlogin.firebaseapp.com",
+      databaseURL: "https://busdriverlogin-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "busdriverlogin",
+      storageBucket: "busdriverlogin.appspot.com",
+      messagingSenderId: "1014266280344",
+      appId: "1:1014266280344:web:80bfc786ceadac46d493ed"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const errorMsg = document.getElementById('errorMsg');
+      errorMsg.textContent = '';
+
+      if (!username || !password) {
+        errorMsg.textContent = "❌ Please fill in both username and password.";
+        return;
+      }
+
+      try {
+        const userRef = ref(db, 'users/' + username);
+        const snapshot = await get(userRef);
+
+        if (!snapshot.exists()) {
+          errorMsg.textContent = "❌ Username not found.";
+          return;
         }
 
-        // Username + Password Login
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value.trim();
-            const errorMsg = document.getElementById('errorMsg');
-            errorMsg.textContent = '';
+        const user = snapshot.val();
 
-            try {
-                const res = await fetch('/api/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
-                });
-
-                const result = await res.json();
-                if (res.ok) {
-                    localStorage.setItem("userId", result.userId); // Store userId
-                    localStorage.setItem("driverId", result.driverId); // Store driverId
-                    // Redirect to Dhome.html after login
-                    window.location.href = "Dhome.html";  // Redirect here instead of driverTrack.html
-                } else {
-                    errorMsg.textContent = result.error || "Login failed.";
-                }
-            } catch (err) {
-                errorMsg.textContent = "❌ Network or server error.";
-            }
-        });
-
-        // 🔐 OTP Login (placeholder only)
-        function sendOtp() {
-            const phone = document.getElementById('otpPhone').value;
-            alert(`📲 Sending OTP to ${phone} (stub)`); // Replace with Firebase OTP logic
+        if (user.password !== password) {
+          errorMsg.textContent = "❌ Incorrect password.";
+          return;
         }
 
-        function verifyOtp() {
-            const code = document.getElementById('otpCode').value;
-            alert(`✅ Verifying OTP: ${code} (stub)`); // Replace with real OTP check
-            window.location.href = "driverTrack.html";
+        if (user.role !== 'driver') {
+          errorMsg.textContent = "❌ Not a driver account.";
+          return;
         }
 
-        // 🌐 Google Login (placeholder only)
-        function googleLogin() {
-            alert("🌐 Signing in with Google (stub)"); // You can integrate Firebase Google login here
-            window.location.href = "driverTrack.html";
+        if (user.status !== 'active') {
+          errorMsg.textContent = `❌ Account is ${user.status}.`;
+          return;
         }
-    </script>
 
+        // Login success
+        localStorage.setItem("userId", user.userId || "");
+        localStorage.setItem("driverId", username);
+        errorMsg.style.color = 'green';
+        errorMsg.textContent = "✅ Login successful! Redirecting...";
+        setTimeout(() => window.location.href = "Dhome.html", 1000);
+      } catch (err) {
+        console.error("Login error:", err);
+        errorMsg.textContent = "❌ Firebase error: " + (err.message || "Unknown error.");
+      }
+    });
+
+    window.showTab = function (id) {
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.login-box').forEach(box => box.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      document.querySelector(`[onclick="showTab('${id}')"]`).classList.add('active');
+    };
+
+    window.sendOtp = function () {
+      const phone = document.getElementById('otpPhone').value;
+      alert(`📲 Sending OTP to ${phone} (stub, not implemented)`);
+    };
+
+    window.verifyOtp = function () {
+      const code = document.getElementById('otpCode').value;
+      alert(`✅ Verifying OTP: ${code} (stub, not implemented)`);
+    };
+
+    window.googleLogin = function () {
+      alert("🌐 Google Sign-In is not yet implemented.");
+    };
+  </script>
 </body>
-
 </html>

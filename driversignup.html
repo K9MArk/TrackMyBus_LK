@@ -2,102 +2,335 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Driver Registration - TrackMyBus</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      padding: 30px;
-    }
-    h2 {
-      color: #007BFF;
-    }
-    form {
-      background: #fff;
-      padding: 20px;
-      margin-bottom: 30px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
-      border-radius: 10px;
-      max-width: 600px;
-    }
-    input, select, button {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 14px;
-    }
-    button {
-      background-color: #28a745;
-      color: white;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #218838;
-    }
-    #addMsg, #errorMsg {
-      font-weight: bold;
-      margin-top: 10px;
-    }
-    #addMsg { color: green; }
-    #errorMsg { color: red; }
+  <title>Driver Registration</title>
+
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+     <link rel="stylesheet" href="C:\Users\Nadun Perera\public\test\6\dashL3.css">
+
+
+ <style>
+     /* Ocean Background */
+ /* Base Setup */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #05668D, #00A896);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+}
+
+        /* Enhanced Bubbles Animation */
+        .bubbles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            top: 0;
+            left: 0;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: rise 15s infinite ease-in;
+            opacity: 0.6;
+        }
+
+        /* Bubble sizes - 10 different sizes */
+        .bubble.size-1 { width: 3px; height: 3px; }
+        .bubble.size-2 { width: 4px; height: 4px; }
+        .bubble.size-3 { width: 5px; height: 5px; }
+        .bubble.size-4 { width: 6px; height: 6px; }
+        .bubble.size-5 { width: 7px; height: 7px; }
+        .bubble.size-6 { width: 8px; height: 8px; }
+        .bubble.size-7 { width: 9px; height: 9px; }
+        .bubble.size-8 { width: 10px; height: 10px; }
+        .bubble.size-9 { width: 12px; height: 12px; }
+        .bubble.size-10 { width: 14px; height: 14px; }
+
+        @keyframes rise {
+            0% {
+                bottom: -100px;
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(100px);
+            }
+            100% {
+                bottom: 1080px;
+                transform: translateX(-200px);
+            }
+        }
+
+        
+
+
+/* Card Form */
+.card {
+  width: 100%;
+  max-width: 500px;
+  margin: 20px;
+  padding: 30px 25px;
+  border-radius: 15px;
+  background: linear-gradient(to bottom right, #87CEEB, #ffffff);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  color: #000;
+  border: 3px solid #FFD700;
+  box-sizing: border-box;
+}
+
+.card h2 {
+  text-align: center;
+  color: #111;
+  margin-bottom: 15px;
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-shadow: 1px 1px #FFD700;
+}
+
+.card input[type="text"],
+.card input[type="password"],
+.card input[type="email"],
+.card input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.card button {
+  background-color: #FFD700;
+  color: black;
+  padding: 12px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 16px;
+  transition: background 0.3s ease;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.card button:hover {
+  background-color: #e6c200;
+}
+
+.card img#preview {
+  margin-top: 10px;
+  border-radius: 6px;
+  border: 2px solid #FFD700;
+  max-width: 100%;
+}
+
+.card p {
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+
+/* Make page scrollable on small screens */
+@media (max-width: 768px) {
+  body {
+    align-items: stretch;
+    justify-content: flex-start;
+    min-height: 100vh;
+  }
+
+  .card {
+    margin-top: 20px;
+    margin-bottom: 50px;
+  }
+}
+
+
+
+/* Bubbles */
+.bubbles {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+}
+.bubble {
+  position: absolute;
+  bottom: -100px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+  animation: rise 15s infinite ease-in;
+  opacity: 0.6;
+}
+@keyframes rise {
+  0% { bottom: -100px; transform: translateX(0); }
+  50% { transform: translateX(100px); }
+  100% { bottom: 1080px; transform: translateX(-200px); }
+}
+/* Bubble sizes */
+.bubble.size-1 { width: 3px; height: 3px; }
+.bubble.size-2 { width: 4px; height: 4px; }
+.bubble.size-3 { width: 5px; height: 5px; }
+.bubble.size-4 { width: 6px; height: 6px; }
+.bubble.size-5 { width: 7px; height: 7px; }
+.bubble.size-6 { width: 8px; height: 8px; }
+.bubble.size-7 { width: 9px; height: 9px; }
+.bubble.size-8 { width: 10px; height: 10px; }
+.bubble.size-9 { width: 12px; height: 12px; }
+.bubble.size-10 { width: 14px; height: 14px; }
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .card {
+    padding: 20px 15px;
+  }
+
+  .card h2 {
+    font-size: 1.5rem;
+  }
+
+  .card input,
+  .card button {
+    font-size: 14px;
+  }
+
+  .card img#preview {
+    max-width: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    margin: 10px;
+    padding: 15px;
+  }
+
+  .card h2 {
+    font-size: 1.3rem;
+  }
+
+  .card p {
+    font-size: 12px;
+  }
+
+  .card button {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
+
+        
   </style>
+
+
 </head>
 <body>
+  <div id="bubblesContainer" class="bubbles"></div>
+<div class="card">
+    <h2>Driver Registration</h2>
+    <form id="driverForm">
+  <input type="text" id="username" placeholder="Username" required><br>
+  <input type="password" id="password" placeholder="Password (min 6 chars)" required><br>
+  <input type="text" id="fullname" placeholder="Full Name" required><br>
+  <input type="email" id="email" placeholder="Email" required><br>
+  <input type="text" id="phone" placeholder="Phone"><br>
 
-<h2>Driver Registration</h2>
-<form id="driverForm">
-  <input type="text" id="username" placeholder="Username" required>
-  <input type="password" id="password" placeholder="Password (min 6 chars)" required>
-  <input type="text" id="fullname" placeholder="Full Name" required>
-  <input type="email" id="email" placeholder="Email Address" required>
-  <input type="text" id="phone" placeholder="Phone Number">
-  <input type="text" id="profilePic" placeholder="Profile Picture URL">
+  <label for="profilePic">Profile Picture (PNG only, Max 2MB):</label><br>
+  <input type="file" id="profilePic" accept=".png"><br>
+  <img id="preview" style="display:none; max-width:100px;"><br>
+  <p id="fileError" style="color:red;"></p>
 
-  <select id="busId" required>
-    <option value="">Select Bus ID</option>
-    <option value="bus_101">bus_101</option>
-    <option value="bus_102">bus_102</option>
-  </select>
+  <input type="hidden" id="status" value="active">
 
-  <select id="routeId" required>
-    <option value="">Select Route</option>
-    <option value="route_120">Kadawatha - Colombo</option>
-    <option value="route_130">Gampaha - Nugegoda</option>
-  </select>
+  <button type="submit">Register</button><br>
 
-  <input type="text" id="current_location" placeholder="Current Location (optional)">
-  <input type="text" id="status" placeholder="Bus Status (on_time, delayed)" value="on_time">
 
-  <button type="submit">Register Driver</button>
-  <p id="addMsg"></p>
-  <p id="errorMsg"></p>
+
+  <div class="signup-text">
+      Do you already have an account?
+      <a href="driverLogin.html">Sign In</a>
+    </div>
+  <p id="addMsg" style="color:green;"></p>
+  <p id="errorMsg" style="color:red;"></p>
 </form>
+</div>
+<!-- Firebase v9 SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+  import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
 
-<script>
-  document.getElementById('driverForm').addEventListener('submit', async (e) => {
+  const firebaseConfig = {
+    apiKey: "AIzaSyAalfVG-12m72vwjYnr7IjAc0IwMCGlhY4",
+    authDomain: "busdriverlogin.firebaseapp.com",
+    databaseURL: "https://busdriverlogin-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "busdriverlogin",
+    storageBucket: "busdriverlogin.appspot.com",
+    messagingSenderId: "1014266280344",
+    appId: "1:1014266280344:web:80bfc786ceadac46d493ed",
+    measurementId: "G-Q13Q5YB4FG"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  console.log("✅ Firebase initialized");
+
+  const form = document.getElementById('driverForm');
+  const preview = document.getElementById('preview');
+  const fileError = document.getElementById('fileError');
+
+  // Profile preview
+  document.getElementById('profilePic').addEventListener('change', () => {
+    const file = document.getElementById('profilePic').files[0];
+    if (!file) return;
+
+    const fileSizeMB = file.size / 1024 / 1024;
+    if (file.type !== 'image/png') {
+      fileError.textContent = "❌ Only PNG allowed";
+      preview.style.display = 'none';
+      return;
+    } else if (fileSizeMB > 2) {
+      fileError.textContent = "❌ Max size is 2MB";
+      preview.style.display = 'none';
+      return;
+    } else {
+      fileError.textContent = "";
+      const reader = new FileReader();
+      reader.onload = e => {
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const fullname = document.getElementById('fullname').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const status = document.getElementById('status').value.trim();
+    const picture = document.getElementById('profilePic').files[0];
     const addMsg = document.getElementById('addMsg');
     const errorMsg = document.getElementById('errorMsg');
     addMsg.textContent = '';
     errorMsg.textContent = '';
 
-    const user_name = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value.trim();
-    const full_name = document.getElementById('fullname').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const phone_number = document.getElementById('phone').value.trim();
-    const profile_picture = document.getElementById('profilePic').value.trim();
-
-    const busId = document.getElementById('busId').value.trim();
-    const routeId = document.getElementById('routeId').value.trim();
-    const current_location = document.getElementById('current_location').value.trim() || "unknown";
-    const status = document.getElementById('status').value.trim() || "on_time";
-
-    if (!user_name || !password || !full_name || !email || !busId || !routeId) {
-      errorMsg.textContent = "❌ Please fill in all required fields.";
+    if (!username || !password || !fullname || !email) {
+      errorMsg.textContent = "❌ Fill all required fields.";
       return;
     }
 
@@ -107,56 +340,141 @@
     }
 
     try {
-      // Step 1: Register user
-      const userRes = await fetch('/api/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_name, password, full_name, email,
-          phone_number, profile_picture,
-          role: 'driver'
-        })
-      });
-
-      const userResult = await userRes.json();
-
-      if (!userRes.ok) {
-        errorMsg.textContent = "❌ " + (userResult.error || "Failed to register user");
+      const userRef = ref(db, 'users/' + username);
+      const snapshot = await get(userRef);
+      if (snapshot.exists()) {
+        errorMsg.textContent = "❌ Username already exists!";
         return;
       }
 
-      // Step 2: Register driver
-      const driverRes = await fetch('/api/drivers', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          driverId: "driver_" + Date.now(),
-          userId: userResult.userId,  // Use the userId from the response
-          busId,
-          routeId,
-          current_location,
-          status
-        })
+      const userId = `user_${Date.now()}`;
+      await set(userRef, {
+        userId,
+        user_name: username,
+        password,
+        full_name: fullname,
+        email,
+        phone_number: phone,
+        profile_picture: picture ? preview.src : null,
+        role: 'driver',
+        status,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       });
 
-      const driverResult = await driverRes.json();
+      addMsg.textContent = "✅ Driver registered successfully.";
+      form.reset();
+      preview.style.display = "none";
 
-      if (!driverRes.ok) {
-        errorMsg.textContent = "❌ " + (driverResult.error || "Failed to register driver");
-        return;
-      }
-
-      addMsg.textContent = "✅ Driver registered successfully!";
-      document.getElementById('driverForm').reset();
     } catch (err) {
-      console.error(err);
-      errorMsg.textContent = "❌ Network or server error. Try again.";
+      console.error("🔥 Firebase error:", err);
+      errorMsg.textContent = "❌ Firebase error: " + (err.message || "Unknown error");
     }
   });
 </script>
+<script> 
 
 
-</body>
+
+   // Generate 200 bubbles with random positions, sizes, and animation properties
+        function generateBubbles() {
+            const bubblesContainer = document.getElementById('bubblesContainer');
+            
+            for (let i = 0; i < 200; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                
+                // Random size (1-10)
+                const sizeClass = `size-${Math.floor(Math.random() * 10) + 1}`;
+                bubble.classList.add(sizeClass);
+                
+                // Random position
+                const leftPos = Math.random() * 100;
+                bubble.style.left = `${leftPos}%`;
+                
+                // Random animation duration (10-20s)
+                const duration = 10 + Math.random() * 10;
+                bubble.style.animationDuration = `${duration}s`;
+                
+                // Random delay (0-5s)
+                const delay = Math.random() * 5;
+                bubble.style.animationDelay = `${delay}s`;
+                
+                // Random opacity (0.3-0.8)
+                const opacity = 0.3 + Math.random() * 0.5;
+                bubble.style.opacity = opacity;
+                
+                bubblesContainer.appendChild(bubble);
+            }
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        function toggleMenu(menuId) {
+            const menuItems = document.getElementById(menuId);
+            menuItems.classList.toggle('active');
+            
+            // Find the parent menu item and toggle its active class
+            const parentLink = document.querySelector(`a[data-toggle="${menuId}"]`);
+            if (parentLink) {
+                parentLink.classList.toggle('active');
+            }
+        }
+
+        function hideMenuItems(event, menuId) {
+            const menuItems = document.getElementById(menuId);
+            if (!menuItems.contains(event.relatedTarget) && event.target !== menuItems) {
+                menuItems.classList.remove('active');
+                
+                // Also remove active class from parent link
+                const parentLink = document.querySelector(`a[data-toggle="${menuId}"]`);
+                if (parentLink) {
+                    parentLink.classList.remove('active');
+                }
+            }
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.remove('active');
+        }
+
+        window.onload = function() {
+            generateBubbles();
+            
+            const menuButtons = document.querySelectorAll('a[data-toggle]');
+            menuButtons.forEach(button => {
+                button.addEventListener('mouseleave', (event) => hideMenuItems(event, button.getAttribute('data-toggle')));
+            });
+
+            const sidebar = document.getElementById('sidebar');
+            sidebar.addEventListener('mouseleave', closeSidebar);
+
+            const subMenuLinks = document.querySelectorAll('.menu-sub-items');
+            subMenuLinks.forEach(menu => {
+                menu.addEventListener('mouseleave', (event) => {
+                    menu.classList.remove('active');
+                    // Also remove active class from parent link
+                    const parentLink = document.querySelector(`a[data-toggle="${menu.id}"]`);
+                    if (parentLink) {
+                        parentLink.classList.remove('active');
+                    }
+                });
+            });
+
+            // Close sidebar when clicking outside
+            document.addEventListener('click', function(event) {
+                const sidebar = document.getElementById('sidebar');
+                const toggleBtn = document.querySelector('.toggle-btn');
+                if (!sidebar.contains(event.target) && event.target !== toggleBtn) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        };
+</script>
+<script src="/test/6/dash.js"></script>
+
 </html>
-
-

@@ -5,229 +5,80 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Add Bus and Route - TrackMyBus.lk</title>
-  <style>
-    /* Reset some basic styles */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f5f5f5;
-      padding: 20px;
-    }
-
-    h1 {
-      color: #007bff;
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    /* Navigation Bar */
-    nav {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: #007bff;
-      padding: 10px 0;
-      border-radius: 10px;
-      margin-bottom: 30px;
-    }
-
-    nav a {
-      color: white;
-      text-decoration: none;
-      padding: 12px 20px;
-      font-size: 1.1rem;
-      margin: 0 15px;
-      border-radius: 5px;
-      transition: background-color 0.3s;
-    }
-
-    nav a:hover {
-      background-color: #0056b3;
-    }
-
-    /* Container for content */
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      background-color: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    input,
-    select,
-    button {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      font-size: 14px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    button {
-      background-color: #28a745;
-      color: white;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #218838;
-    }
-
-    #addMsg,
-    #errorMsg {
-      font-weight: bold;
-      margin-top: 10px;
-    }
-
-    #addMsg {
-      color: green;
-    }
-
-    #errorMsg {
-      color: red;
-    }
-
-    /* Display Bus and Route Details */
-    .details {
-      margin-top: 30px;
-      padding: 15px;
-      background-color: #e9ecef;
-      border-radius: 5px;
-    }
-
-    /* Console Panel for debugging */
-    .console {
-      background-color: #333;
-      color: #fff;
-      padding: 10px;
-      margin-top: 20px;
-      border-radius: 5px;
-      font-family: 'Courier New', Courier, monospace;
-      white-space: pre-wrap;
-    }
-  </style>
 </head>
-
 <body>
-
-  <!-- Navigation Bar -->
   <nav>
     <a href="Dhome.html">Home</a>
     <a href="addBusAndRoute.html">Add Bus and Route</a>
     <a href="driverTrack.html">Driver Track</a>
   </nav>
 
-  <!-- Main Content -->
   <div class="container">
     <h1>Add New Bus and Route</h1>
     <form id="addBusAndRouteForm">
-
-      <!-- Bus Details -->
       <h3>Bus Details</h3>
-      <div class="form-group">
-        <input type="text" id="busNumber" placeholder="Bus Number" required />
-      </div>
-      <div class="form-group">
-        <input type="text" id="plateNumber" placeholder="Plate Number" required />
-      </div>
-      <div class="form-group">
-        <input type="number" id="capacity" placeholder="Capacity" required />
-      </div>
-      <div class="form-group">
-        <input type="text" id="busModel" placeholder="Bus Model" required />
-      </div>
+      <input type="text" id="busNumber" placeholder="Bus Number" required />
+      <input type="text" id="plateNumber" placeholder="Plate Number" required />
+      <input type="number" id="capacity" placeholder="Capacity" required />
+      <input type="text" id="busModel" placeholder="Bus Model" required />
 
-      <!-- Route Details -->
       <h3>Route Details</h3>
-      <div class="form-group">
-        <input type="text" id="routeId" placeholder="Route ID" required />
-      </div>
-      <div class="form-group">
-        <input type="text" id="routeName" placeholder="Route Name" required />
-      </div>
-      <div class="form-group">
-        <input type="text" id="routeDescription" placeholder="Route Description" required />
-      </div>
+      <select id="routeDropdown" required>
+        <option value="">Select Route</option>
+      </select>
 
       <button type="submit" id="submitBtn">Add Bus and Route</button>
-
       <p id="addMsg"></p>
       <p id="errorMsg"></p>
     </form>
-
-    <!-- Display Added Bus and Route -->
-    <div class="details" id="details" style="display: none;">
-      <h2>Bus and Route Details</h2>
-      <h3>Bus Details:</h3>
-      <p><strong>Bus Number:</strong> <span id="busNumberDisplay"></span></p>
-      <p><strong>Plate Number:</strong> <span id="plateNumberDisplay"></span></p>
-      <p><strong>Capacity:</strong> <span id="capacityDisplay"></span></p>
-      <p><strong>Model:</strong> <span id="busModelDisplay"></span></p>
-
-      <h3>Route Details:</h3>
-      <p><strong>Route ID:</strong> <span id="routeIdDisplay"></span></p>
-      <p><strong>Route Name:</strong> <span id="routeNameDisplay"></span></p>
-      <p><strong>Route Description:</strong> <span id="routeDescriptionDisplay"></span></p>
-    </div>
-
   </div>
 
-  <!-- Console Panel for Debugging -->
-  <div class="console">
-    <h3>Console Output:</h3>
-    <pre id="consoleOutput">
-      Fetched User ID: <span id="fetchedUserId">Not Available</span>
-    </pre>
-  </div>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+  import {
+    getDatabase, ref, get, set, onValue
+  } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
 
- <script>
-  async function checkIfUserAlreadyAdded() {
-    const userId = localStorage.getItem('userId');
-    if (!userId) return;
+  const firebaseConfig = {
+    apiKey: "AIzaSyAalfVG-12m72vwjYnr7IjAc0IwMCGlhY4",
+    authDomain: "busdriverlogin.firebaseapp.com",
+    databaseURL: "https://busdriverlogin-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "busdriverlogin",
+    storageBucket: "busdriverlogin.appspot.com",
+    messagingSenderId: "1014266280344",
+    appId: "1:1014266280344:web:80bfc786ceadac46d493ed"
+  };
 
-    document.getElementById('fetchedUserId').textContent = userId;
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
 
-    try {
-      const [driverRes, busRes, routeRes] = await Promise.all([
-        fetch(`/api/drivers/searchByUser?userId=${userId}`),
-        fetch(`/api/buses/searchByUser?userId=${userId}`),
-        fetch(`/api/routes/searchByUser?userId=${userId}`)
-      ]);
+  const userId = localStorage.getItem('userId');
+  const routeDropdown = document.getElementById('routeDropdown');
+  const addMsg = document.getElementById('addMsg');
+  const errorMsg = document.getElementById('errorMsg');
 
-      const driverData = await driverRes.json();
-      const busData = await busRes.json();
-      const routeData = await routeRes.json();
-
-      if (driverData.driver || busData.bus || routeData.route) {
-        document.getElementById('errorMsg').textContent =
-          '❌ You have already added a bus, route, or driver!';
-        document.getElementById('addBusAndRouteForm').reset();
-        document.getElementById('submitBtn').disabled = true;
-        document.querySelectorAll('input, select').forEach(el => el.disabled = true);
-        return;
+  // Load routes into dropdown
+  function populateRoutes() {
+    const routeDetailsRef = ref(db, 'routeDetails');
+    onValue(routeDetailsRef, (snapshot) => {
+      if (snapshot.exists()) {
+        routeDropdown.innerHTML = '<option value="">Select Route</option>';
+        const data = snapshot.val();
+        Object.entries(data).forEach(([rid, routeObj]) => {
+          const name = routeObj.route_name || routeObj.from?.route_name || "Unnamed";
+          const description = routeObj.route_description || routeObj.description || "No description";
+          const option = document.createElement('option');
+          option.value = rid;
+          option.textContent = `${name} (${rid}) - ${description}`;
+          routeDropdown.appendChild(option);
+        });
       }
-    } catch (err) {
-      console.error("❌ Error checking duplicates:", err);
-    }
+    });
   }
 
+  // Handle form submission
   document.getElementById('addBusAndRouteForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-
-    const addMsg = document.getElementById('addMsg');
-    const errorMsg = document.getElementById('errorMsg');
     addMsg.textContent = '';
     errorMsg.textContent = '';
 
@@ -235,122 +86,95 @@
     const plateNumber = document.getElementById('plateNumber').value.trim();
     const capacity = document.getElementById('capacity').value.trim();
     const busModel = document.getElementById('busModel').value.trim();
-    const routeId = document.getElementById('routeId').value.trim();
-    const routeName = document.getElementById('routeName').value.trim();
-    const routeDescription = document.getElementById('routeDescription').value.trim();
+    const selectedRouteId = routeDropdown.value;
 
-    if (!busNumber || !plateNumber || !capacity || !busModel || !routeId || !routeName || !routeDescription) {
+    if (!busNumber || !plateNumber || !capacity || !busModel || !selectedRouteId) {
       errorMsg.textContent = "❌ Please fill in all required fields.";
       return;
     }
 
+    if (!userId) {
+      errorMsg.textContent = "❌ User not logged in!";
+      return;
+    }
+
     try {
-      const userId = localStorage.getItem('userId');
-      if (!userId) {
-        errorMsg.textContent = "❌ User not logged in!";
-        return;
-      }
-
-      console.log("Fetched User ID:", userId);
-
-      const [busResCheck, routeResCheck] = await Promise.all([
-        fetch(`/api/buses/search?plate_number=${plateNumber}`),
-        fetch(`/api/routes/search?routeId=${routeId}`) // ✅ corrected key here
+      const [driverSnap, busesSnap] = await Promise.all([
+        get(ref(db, 'drivers')),
+        get(ref(db, 'buses'))
       ]);
 
-      const busData = await busResCheck.json();
-      const routeData = await routeResCheck.json();
+      // ❌ Block if driver already exists for this user
+      const drivers = driverSnap.val();
+      if (drivers) {
+        const hasDriver = Object.values(drivers).some(d => d.userId === userId);
+        if (hasDriver) {
+          errorMsg.textContent = "❌ You have already registered as a driver.";
+          return;
+        }
+      }
 
-      if (busData.length > 0) {
-        errorMsg.textContent = "❌ You have already added a bus with this plate number.";
-        return;
+      // ❌ Block if bus plate exists or user already has a bus
+      const buses = busesSnap.val();
+      if (buses) {
+        const duplicatePlate = Object.values(buses).some(b => b.plate_number === plateNumber);
+        const userHasBus = Object.values(buses).some(b => b.userId === userId);
+        if (duplicatePlate) {
+          errorMsg.textContent = "❌ This plate number is already registered.";
+          return;
+        }
+        if (userHasBus) {
+          errorMsg.textContent = "❌ You have already added a bus.";
+          return;
+        }
       }
-      if (routeData.length > 0) {
-        errorMsg.textContent = "❌ You have already added a route with this route ID.";
-        return;
-      }
+
+      const busId = `bus_${Date.now()}`;
+      const routeId = `route_${Date.now()}`;
+      const driverId = `driver_${Date.now()}`;
 
       const newBus = {
         bus_number: busNumber,
         plate_number: plateNumber,
         capacity: Number(capacity),
         model: busModel,
-        routeId, // ✅ include routeId in bus
+        routeId: selectedRouteId,
         userId
       };
 
       const newRoute = {
         routeId,
-        route_name: routeName,
-        route_description: routeDescription,
+        route_name: selectedRouteId, // Save only FK
         userId
       };
 
-      const busRes = await fetch('/api/buses', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newBus)
-      });
-
-      const routeRes = await fetch('/api/routes', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newRoute)
-      });
-
-      const busResult = await busRes.json();
-      const routeResult = await routeRes.json();
-
-      if (!busRes.ok || !routeRes.ok) {
-        errorMsg.textContent = "❌ " + (busResult.error || routeResult.error || "Failed to add bus or route.");
-        return;
-      }
-
       const newDriver = {
-        driverId: `driver_${Date.now()}`,
+        driverId,
         userId,
-        busId: busResult.insertedId,
-        routeId, // ✅ use same string routeId, not routeResult.insertedId
+        busId,
+        routeId: selectedRouteId,
         status: 'on_time',
         current_location: 'unknown',
-        last_update: new Date()
+        last_update: new Date().toISOString()
       };
 
-      const driverRes = await fetch('/api/drivers', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newDriver)
-      });
+      await Promise.all([
+        set(ref(db, `buses/${busId}`), newBus),
+        set(ref(db, `routes/${routeId}`), newRoute),
+        set(ref(db, `drivers/${driverId}`), newDriver)
+      ]);
 
-      const driverResult = await driverRes.json();
-
-      if (!driverRes.ok) {
-        console.log("Missing data for driver:", driverResult);
-        errorMsg.textContent = "❌ Failed to add driver.";
-        return;
-      }
-
-      addMsg.textContent = "✅ Bus, Route, and Driver added successfully!";
+      addMsg.textContent = "✅ Success! Your bus, route, and driver record has been added.";
       document.getElementById('addBusAndRouteForm').reset();
-
-      document.getElementById('busNumberDisplay').textContent = busNumber;
-      document.getElementById('plateNumberDisplay').textContent = plateNumber;
-      document.getElementById('capacityDisplay').textContent = capacity;
-      document.getElementById('busModelDisplay').textContent = busModel;
-      document.getElementById('routeIdDisplay').textContent = routeId;
-      document.getElementById('routeNameDisplay').textContent = routeName;
-      document.getElementById('routeDescriptionDisplay').textContent = routeDescription;
-      document.getElementById('details').style.display = 'block';
 
     } catch (err) {
       console.error(err);
-      errorMsg.textContent = "❌ Network or server error. Try again.";
+      errorMsg.textContent = "❌ Firebase error. Please try again later.";
     }
   });
 
-  checkIfUserAlreadyAdded();
+  populateRoutes();
 </script>
-
 
 </body>
 

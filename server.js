@@ -144,7 +144,7 @@ app.listen(PORT, () => {
 // DEBUGGING & DRIVER TESTING
 // ========================
 
-// Debugging: Log received userId and handle driver creation
+// Debugging: Log received userId and handle driver creation000000000000000000000000000000000
 // ✅ Add driver to Firebase
 app.post('/api/drivers', async (req, res) => {
   const { driverId, userId, busId, routeId, status, current_location, last_update } = req.body;
@@ -289,61 +289,95 @@ app.post('/api/buses', async (req, res) => {
 });
 
 
+
+
+
+
 app.post('/api/routes', async (req, res) => {
+  const { routeId, route_name, route_description, userId } = req.body;
+
+  if (!routeId || !route_name || !userId) {
+    return res.status(400).json({ error: 'Missing required route fields' });
+  }
+
   try {
-    const { routeId, route_name, route_description, userId } = req.body;
+    const routeRef = firebaseDB.ref(`routes/${routeId}`);
+    const snapshot = await routeRef.once('value');
 
-    if (!routeId || !route_name || !userId) {
-      return res.status(400).json({ error: 'Missing required route fields' });
-    }
-
-    const existing = await db.collection('routes').findOne({ routeId });
-    if (existing) {
+    if (snapshot.exists()) {
       return res.status(409).json({ error: 'Route ID already exists' });
     }
 
-    const result = await db.collection('routes').insertOne({
+    await routeRef.set({
       routeId,
       route_name,
-      route_description,
+      route_description: route_description || '',
       userId,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     });
 
-    res.json({ message: '✅ Route added successfully', insertedId: result.insertedId });
+    res.json({ message: '✅ Route added successfully' });
   } catch (err) {
-    console.error('Error adding route:', err.message);
+    console.error('❌ Error adding route:', err.message);
     res.status(500).json({ error: 'Failed to add route' });
   }
 });
-
 
 app.get('/api/buses/search', async (req, res) => {
   const { plate_number } = req.query;
   if (!plate_number) return res.status(400).json({ error: 'Missing plate_number query param' });
 
-  const buses = await db.collection('buses').find({ plate_number }).toArray();
-  res.json(buses);
+  try {
+    const snapshot = await firebaseDB.ref('buses').orderByChild('plate_number').equalTo(plate_number).once('value');
+    const results = snapshot.val() || {};
+
+    res.json(Object.values(results));
+  } catch (err) {
+    console.error("❌ Error fetching bus by plate_number:", err);
+    res.status(500).json({ error: "Failed to fetch bus" });
+  }
 });
+
 
 
 app.get('/api/routes/search', async (req, res) => {
   const { route_id } = req.query;
   if (!route_id) return res.status(400).json({ error: 'Missing route_id query param' });
 
-  const routes = await db.collection('routes').find({ routeId: route_id }).toArray();
-  res.json(routes);
+  try {
+    const routeSnap = await firebaseDB.ref(`routes/${route_id}`).once('value');
+    const route = routeSnap.val();
+
+    if (!route) return res.status(404).json({ error: 'Route not found' });
+
+    res.json([route]);
+  } catch (err) {
+    console.error("❌ Error fetching route:", err);
+    res.status(500).json({ error: "Failed to fetch route" });
+  }
 });
+
 
 
 app.get('/api/drivers/searchByUser', async (req, res) => {
   const { userId } = req.query;
   if (!userId) return res.status(400).json({ error: 'Missing userId query param' });
 
-  const driver = await db.collection('drivers').findOne({ userId });
-  res.json({ driver });
+  try {
+    const snapshot = await firebaseDB.ref('drivers').orderByChild('userId').equalTo(userId).once('value');
+    const results = snapshot.val();
+
+    if (!results) return res.json({ driver: null });
+
+    const driver = Object.values(results)[0];
+    res.json({ driver });
+  } catch (err) {
+    console.error("❌ Error fetching driver:", err);
+    res.status(500).json({ error: "Failed to fetch driver" });
+  }
 });
+
 
 // ===================== Driver, Bus, and Route Lookup APIs =====================
 
@@ -353,14 +387,19 @@ app.get('/api/drivers/searchByUser', async (req, res) => {
   if (!userId) return res.status(400).json({ error: 'Missing userId' });
 
   try {
-    const driver = await db.collection('drivers').findOne({ userId });
-    if (driver) return res.json({ driver });
-    res.json({ driver: null });
+    const snapshot = await firebaseDB.ref('drivers').orderByChild('userId').equalTo(userId).once('value');
+    const data = snapshot.val();
+
+    if (!data) return res.json({ driver: null });
+
+    const driver = Object.values(data)[0];
+    res.json({ driver });
   } catch (err) {
-    console.error("Error finding driver by userId:", err);
+    console.error("❌ Error finding driver by userId:", err.message);
     res.status(500).json({ error: 'Server error' });
   }
 });
+
 
 // Search for bus by userId
 app.get('/api/buses/searchByUser', async (req, res) => {
@@ -368,11 +407,15 @@ app.get('/api/buses/searchByUser', async (req, res) => {
   if (!userId) return res.status(400).json({ error: 'Missing userId' });
 
   try {
-    const bus = await db.collection('buses').findOne({ userId });
-    if (bus) return res.json({ bus });
-    res.json({ bus: null });
+    const snapshot = await firebaseDB.ref('buses').orderByChild('userId').equalTo(userId).once('value');
+    const data = snapshot.val();
+
+    if (!data) return res.json({ bus: null });
+
+    const bus = Object.values(data)[0];
+    res.json({ bus });
   } catch (err) {
-    console.error("Error finding bus by userId:", err);
+    console.error("❌ Error finding bus by userId:", err.message);
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -383,14 +426,20 @@ app.get('/api/routes/searchByUser', async (req, res) => {
   if (!userId) return res.status(400).json({ error: 'Missing userId' });
 
   try {
-    const route = await db.collection('routes').findOne({ userId });
-    if (route) return res.json({ route });
-    res.json({ route: null });
+    const snapshot = await firebaseDB.ref('routes').orderByChild('userId').equalTo(userId).once('value');
+    const data = snapshot.val();
+
+    if (!data) return res.json({ route: null });
+
+    const route = Object.values(data)[0]; // Return the first matching route
+    res.json({ route });
   } catch (err) {
-    console.error("Error finding route by userId:", err);
+    console.error("❌ Error finding route by userId:", err.message);
     res.status(500).json({ error: 'Server error' });
   }
 });
+
+
 
 
 // track driver 
@@ -398,27 +447,29 @@ app.get('/api/routes/searchByUser', async (req, res) => {
 app.post('/api/location/update', async (req, res) => {
   const { busId, lat, lng } = req.body;
 
-  if (!busId || !lat || !lng) {
+  if (!busId || lat == null || lng == null) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
   try {
-    await db.collection('bus_location_history').insertOne({
-      busId,
+    const ref = firebaseDB.ref(`bus_location_history/${busId}`);
+    const newEntryRef = ref.push(); // Generate a unique ID under busId
+
+    await newEntryRef.set({
       latitude: lat,
       longitude: lng,
-      timestamp: new Date()
+      timestamp: new Date().toISOString()
     });
 
-    res.json({ message: 'Location updated successfully' });
+    res.json({ message: '✅ Location updated in Firebase' });
   } catch (err) {
-    console.error('Error updating location:', err.message);
+    console.error('❌ Error updating location:', err.message);
     res.status(500).json({ error: 'Failed to update location' });
   }
 });
 
 
-// POST: Update bus location (with duplicate check)
+
 app.post('/api/location/update', async (req, res) => {
   const { userId, driverId, busId, routeId, lat, lng } = req.body;
 
@@ -427,42 +478,44 @@ app.post('/api/location/update', async (req, res) => {
   }
 
   try {
-    const busCollection = db.collection('bus_location_history');
+    const busRef = firebaseDB.ref(`bus_location_history/${busId}`);
+    const snapshot = await busRef.orderByChild('timestamp').limitToLast(1).once('value');
+    const lastLocation = snapshot.val();
 
-    // Check if the last recorded location is the same
-    const lastLocation = await busCollection.findOne(
-      { busId },
-      { sort: { timestamp: -1 } }
-    );
-
-    if (
-      lastLocation &&
-      lastLocation.lat === lat &&
-      lastLocation.lng === lng
-    ) {
+    // If no previous location or the location is unchanged, don't save
+    if (lastLocation && lastLocation[Object.keys(lastLocation)[0]].latitude === lat && lastLocation[Object.keys(lastLocation)[0]].longitude === lng) {
       return res.status(200).json({ message: 'Location unchanged. Not saved again.' });
     }
 
-    // Save new location only if changed
-    await busCollection.insertOne({
+    // Push new location if it's different
+    const newLocationRef = busRef.push();
+    await newLocationRef.set({
       userId,
       driverId,
-      busId,
       routeId,
-      lat,
-      lng,
-      timestamp: new Date()
+      latitude: lat,
+      longitude: lng,
+      timestamp: new Date().toISOString()
     });
 
     res.json({ message: '✅ Location updated successfully.' });
   } catch (err) {
-    console.error('Error saving location:', err);
+    console.error('❌ Error saving location:', err.message);
     res.status(500).json({ error: 'Internal server error.' });
   }
 });
 
-// ✅ API to insert location and delete oldest if more than 2 (MongoDB logic)
-// server.js
+
+    // Save new location only if changed
+  await busCollection.insertOne({
+  userId,
+  driverId,
+  busId,
+  routeId,
+  lat,
+  lng,
+  timestamp: new Date()
+});
 
 app.post('/api/location/update', async (req, res) => {
   const { userId, driverId, busId, routeId, lat, lng } = req.body;
@@ -472,29 +525,31 @@ app.post('/api/location/update', async (req, res) => {
   }
 
   try {
-    const collection = db.collection('location_history');
+    const locationRef = firebaseDB.ref(`location_history/${busId}`);
 
     // 1. Insert new location entry
-    await collection.insertOne({
+    const newLocationRef = locationRef.push();
+    await newLocationRef.set({
       userId,
       driverId,
       busId,
       routeId,
       latitude: lat,
       longitude: lng,
-      timestamp: new Date()
+      timestamp: new Date().toISOString()
     });
 
-    // 2. Delete older entries, keep only latest 2 for the bus
-    const extraDocs = await collection
-      .find({ busId })
-      .sort({ timestamp: -1 }) // Newest first
-      .skip(2) // Skip top 2
-      .toArray();
+    // 2. Delete older entries, keep only the latest 2 for the bus
+    const snapshot = await locationRef.orderByChild('timestamp').limitToLast(3).once('value');
+    const locations = snapshot.val();
 
-    const idsToDelete = extraDocs.map(doc => doc._id);
-    if (idsToDelete.length > 0) {
-      await collection.deleteMany({ _id: { $in: idsToDelete } });
+    if (locations) {
+      const keys = Object.keys(locations);
+      if (keys.length > 2) {
+        // Remove the oldest entry (first one in the list)
+        const oldestKey = keys[0];
+        await locationRef.child(oldestKey).remove();
+      }
     }
 
     res.json({ message: '✅ Location updated. Extra entries cleared.' });
@@ -505,42 +560,49 @@ app.post('/api/location/update', async (req, res) => {
 });
 
 
-// Get all routes
 app.get('/api/routes/all', async (req, res) => {
   try {
-    const routes = await db.collection('routes').find().toArray();
-    res.json(routes);
+    const snapshot = await firebaseDB.ref('routes').once('value');
+    const routes = snapshot.val() || {};
+
+    res.json(Object.values(routes)); // Convert object to array before sending
   } catch (err) {
-    console.error("Error fetching all routes:", err);
+    console.error("❌ Error fetching all routes:", err);
     res.status(500).json({ error: "Failed to fetch routes" });
   }
 });
 
-// Get route by ID
+
 app.get('/api/routes/byId', async (req, res) => {
   const { routeId } = req.query;
   if (!routeId) return res.status(400).json({ error: "Missing routeId" });
 
   try {
-    const route = await db.collection('routes').findOne({ routeId });
-    res.json(route || {});
+    const snapshot = await firebaseDB.ref('routes').orderByChild('routeId').equalTo(routeId).once('value');
+    const routes = snapshot.val();
+
+    if (routes) {
+      const route = Object.values(routes)[0]; // Take the first match
+      return res.json(route);
+    } else {
+      return res.json({});
+    }
   } catch (err) {
-    console.error("Error fetching route by ID:", err);
+    console.error("❌ Error fetching route by ID:", err);
     res.status(500).json({ error: "Failed to fetch route" });
   }
 });
-
-
-// Get all buses for a given route
 app.get('/api/buses/byRoute', async (req, res) => {
   const { routeId } = req.query;
   if (!routeId) return res.status(400).json({ error: 'Missing routeId' });
 
   try {
-    const buses = await db.collection('buses').find({ routeId }).toArray();
-    res.json(buses);
+    const snapshot = await firebaseDB.ref('buses').orderByChild('routeId').equalTo(routeId).once('value');
+    const buses = snapshot.val() || {};
+
+    res.json(Object.values(buses)); // Convert object to array
   } catch (err) {
-    console.error("Error fetching buses by routeId:", err);
+    console.error("❌ Error fetching buses by routeId:", err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
