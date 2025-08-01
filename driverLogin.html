@@ -5,243 +5,409 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Driver Login - TrackMyBus</title>
   <style>
+    /* From Uiverse.io by yashasvi9199 */
     body {
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom, #05668D, #00A896);
+      font-family: "Segoe UI", sans-serif;
+      background-color: #0f0f0f;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .form {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-      color: #333;
-    }
-
-    h2 {
-      color: #fff;
-      margin-top: 40px;
-    }
-
-    .tabs {
-      display: flex;
-      margin-top: 20px;
       gap: 10px;
+      padding: 2em;
+      background-color: #171717;
+      border-radius: 25px;
+      transition: 0.4s ease-in-out;
+    }
+
+    .card {
+      background-image: linear-gradient(163deg, #00ff75 0%, #3700ff 100%);
+      border-radius: 22px;
+      transition: all 0.3s;
+    }
+
+    .card2 {
+      transition: all 0.2s;
+    }
+
+    .card2:hover {
+      transform: scale(0.98);
+      border-radius: 20px;
+    }
+
+    .card:hover {
+      box-shadow: 0px 0px 30px 1px rgba(0, 255, 117, 0.3);
+    }
+
+    #heading {
+      text-align: center;
+      margin-bottom: 1.2em;
+      color: #ffffff;
+      font-size: 1.4em;
+    }
+
+    .field {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      border-radius: 25px;
+      padding: 0.6em 1em;
+      background-color: #171717;
+      box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
+    }
+
+    .input-icon {
+      height: 1.3em;
+      width: 1.3em;
+      fill: white;
+    }
+
+    .input-field {
+      background: none;
+      border: none;
+      outline: none;
+      width: 100%;
+      color: #d3d3d3;
+    }
+
+    .btn {
+      display: flex;
+      justify-content: center;
       flex-wrap: wrap;
+      gap: 0.5em;
+      margin-top: 1.5em;
     }
 
-    .tab {
-      padding: 10px 15px;
-      background: #fff;
+    .button1,
+    .button2,
+    .button3 {
+      padding: 0.6em 1.5em;
       border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      color: #05668D;
-      transition: background 0.3s;
+      border: none;
+      outline: none;
+      background-color: #252525;
+      color: white;
+      transition: 0.3s ease-in-out;
     }
 
-    .tab.active {
-      background: #FFD700;
-      color: black;
+    .button1:hover,
+    .button2:hover {
+      background-color: black;
+    }
+
+    .button3 {
+      margin: 1em auto 2em auto;
+      display: block;
+    }
+
+    .button3:hover {
+      background-color: red;
+    }
+
+    .tabs .button2.active {
+      background-color: #00ff75;
+      color: #000;
+      font-weight: bold;
     }
 
     .login-box {
       display: none;
-      flex-direction: column;
-      background: white;
-      padding: 20px;
-      margin-top: 20px;
-      width: 90%;
-      max-width: 400px;
-      border-radius: 10px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      margin-top: 1em;
     }
 
     .login-box.active {
-      display: flex;
-    }
-
-    .login-box input {
-      margin-bottom: 12px;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-    }
-
-    .login-box button {
-      padding: 10px;
-      background-color: #FFD700;
-      color: black;
-      font-weight: bold;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    .login-box button:hover {
-      background-color: #e6c200;
+      display: block;
     }
 
     #errorMsg {
-      color: red;
-      font-size: 0.9rem;
-      margin-top: 5px;
-    }
-
-    .signup-text {
       text-align: center;
-      margin-top: 15px;
-      font-size: 0.95rem;
-      color: #444;
+      margin-top: 0.5em;
+      font-size: 0.95em;
     }
 
-    .signup-text a {
-      color: #05668D;
-      text-decoration: none;
-      font-weight: bold;
-    }
 
-    .signup-text a:hover {
-      text-decoration: underline;
-    }
+    .toggle-password {
+  width: 1.3em;
+  height: 1.3em;
+  fill: white;
+  cursor: pointer;
+  margin-left: 0.4em;
+  transition: 0.3s ease;
+}
 
-    @media (max-width: 500px) {
-      h2 {
-        font-size: 1.5rem;
-      }
+.toggle-password:hover {
+  fill: #00ff75;
+}
 
-      .tab {
-        font-size: 0.9rem;
-        padding: 8px 12px;
-      }
-    }
+
   </style>
 </head>
 <body>
-  <h2>Driver Login - TrackMyBus</h2>
+  <div class="card">
+  <div class="card2">
+    <div class="form">
+      <p id="heading">Driver Login - TrackMyBus</p>
 
-  <div class="tabs">
-    <div class="tab active" onclick="showTab('passwordLogin')">Username & Password</div>
-    <div class="tab" onclick="showTab('otpLogin')">OTP Login</div>
-    <div class="tab" onclick="showTab('googleLogin')">Google Sign-In</div>
-  </div>
+      <!-- Tabs -->
+      <div class="btn tabs">
+        <button class="button2 tab active" onclick="showTab('passwordLogin')">Username & Password</button>
+        <button class="button2 tab" onclick="showTab('otpLogin')">OTP Login</button>
+        <button class="button2 tab" onclick="showTab('googleLogin')">Google Sign-In</button>
+      </div>
 
-  <!-- Username & Password Login -->
-  <div class="login-box active" id="passwordLogin">
-    <form id="loginForm">
-      <input type="text" id="username" placeholder="Username" required>
-      <input type="password" id="password" placeholder="Password" required>
-      <button type="submit">Login</button>
-    </form>
-    <p id="errorMsg"></p>
-    <div class="signup-text">
-      Don't have an account? <a href="driversignup.html">Sign up</a>
+      <!-- Username & Password Login -->
+      <div class="login-box active" id="passwordLogin">
+        <form id="loginForm">
+          <div class="field">
+            <svg class="input-icon" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M13.106 7.222c0-2.967..." />
+            </svg>
+            <input type="text" class="input-field" id="username" placeholder="Username" required />
+          </div>
+
+          <div class="field">
+  <svg class="input-icon" viewBox="0 0 16 16" fill="currentColor">
+    <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2z..." />
+  </svg>
+  <input type="password" class="input-field" id="password" placeholder="Password" required />
+  <svg class="toggle-password" id="eyeIcon" viewBox="0 0 24 24" onclick="togglePasswordVisibility()">
+    <path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12c-2.8 0-5-2.2-5-5s2.2-5 
+             5-5 5 2.2 5 5-2.2 5-5 5zm0-8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z"/>
+  </svg>
+</div>
+
+
+          <div class="btn">
+            <button type="submit" class="button1">Login</button>
+            <button type="button" class="button2" onclick="location.href='driversignup.html'">Sign Up</button>
+          </div>
+
+          <button type="button" class="button3">Forgot Password</button>
+          <p id="errorMsg"></p>
+        </form>
+      </div>
+
+      <!-- OTP Login -->
+      <div class="login-box" id="otpLogin">
+        <div class="field">
+          <input type="text" class="input-field" id="otpPhone" placeholder="Enter phone number" />
+        </div>
+        <div class="field">
+          <input type="text" class="input-field" id="otpCode" placeholder="Enter OTP" />
+        </div>
+        <div class="btn">
+          <button class="button1" onclick="sendOtp()">Send OTP</button>
+          <button class="button1" onclick="verifyOtp()">Verify OTP</button>
+        </div>
+      </div>
+
+      <!-- Google Login -->
+      <div class="login-box" id="googleLogin">
+        <div class="btn">
+          <button class="button1" onclick="googleLogin()">Sign in with Google</button>
+        </div>
+      </div>
     </div>
   </div>
-
-  <!-- OTP Login -->
-  <div class="login-box" id="otpLogin">
-    <input type="text" id="otpPhone" placeholder="Enter phone number" />
-    <button onclick="sendOtp()">Send OTP</button>
-    <input type="text" id="otpCode" placeholder="Enter OTP" />
-    <button onclick="verifyOtp()">Verify OTP</button>
-  </div>
-
-  <!-- Google Login -->
-  <div class="login-box" id="googleLogin">
-    <button class="google-btn" onclick="googleLogin()">Sign in with Google</button>
-  </div>
+</div>
 
   <!-- Firebase SDK -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
-    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+import {
+  getDatabase,
+  ref,
+  get
+} from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider
+} from "https://www.gstatic.com/firebasejs/9.14.0/firebase-auth.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAalfVG-12m72vwjYnr7IjAc0IwMCGlhY4",
-      authDomain: "busdriverlogin.firebaseapp.com",
-      databaseURL: "https://busdriverlogin-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "busdriverlogin",
-      storageBucket: "busdriverlogin.appspot.com",
-      messagingSenderId: "1014266280344",
-      appId: "1:1014266280344:web:80bfc786ceadac46d493ed"
-    };
+const firebaseConfig = {
+  apiKey: "AIzaSyAalfVG-12m72vwjYnr7IjAc0IwMCGlhY4",
+  authDomain: "busdriverlogin.firebaseapp.com",
+  databaseURL: "https://busdriverlogin-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "busdriverlogin",
+  storageBucket: "busdriverlogin.appspot.com",
+  messagingSenderId: "1014266280344",
+  appId: "1:1014266280344:web:80bfc786ceadac46d493ed"
+};
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const auth = getAuth(app);
 
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const username = document.getElementById('username').value.trim();
-      const password = document.getElementById('password').value.trim();
-      const errorMsg = document.getElementById('errorMsg');
-      errorMsg.textContent = '';
+/** ----------------------------
+ * 1. Username/Email/Phone Login
+ ---------------------------- */
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const loginInput = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const errorMsg = document.getElementById('errorMsg');
+  errorMsg.textContent = '';
 
-      if (!username || !password) {
-        errorMsg.textContent = "❌ Please fill in both username and password.";
-        return;
-      }
+  if (!loginInput || !password) {
+    errorMsg.textContent = "❌ Please fill in both username and password.";
+    return;
+  }
 
-      try {
-        const userRef = ref(db, 'users/' + username);
-        const snapshot = await get(userRef);
+  try {
+    const usersRef = ref(db, 'users');
+    const snapshot = await get(usersRef);
+   let matchedUser = null;
+snapshot.forEach(childSnap => {
+  const userData = childSnap.val();
+  if (
+    userData.user_name === loginInput ||
+    userData.email === loginInput ||
+    userData.phone_number === loginInput
+  ) {
+    matchedUser = userData;
+  }
+});
 
-        if (!snapshot.exists()) {
-          errorMsg.textContent = "❌ Username not found.";
-          return;
-        }
 
-        const user = snapshot.val();
+    if (!matchedUser) {
+      errorMsg.textContent = "❌ User not found.";
+      return;
+    }
 
-        if (user.password !== password) {
-          errorMsg.textContent = "❌ Incorrect password.";
-          return;
-        }
+    if (matchedUser.password !== password) {
+      errorMsg.textContent = "❌ Incorrect password.";
+      return;
+    }
 
-        if (user.role !== 'driver') {
-          errorMsg.textContent = "❌ Not a driver account.";
-          return;
-        }
+    if (matchedUser.role !== 'driver') {
+      errorMsg.textContent = "❌ Not a driver account.";
+      return;
+    }
 
-        if (user.status !== 'active') {
-          errorMsg.textContent = `❌ Account is ${user.status}.`;
-          return;
-        }
+    if (matchedUser.status !== 'active') {
+      errorMsg.textContent = `❌ Account is ${matchedUser.status}.`;
+      return;
+    }
 
-        // Login success
-        localStorage.setItem("userId", user.userId || "");
-        localStorage.setItem("driverId", username);
-        errorMsg.style.color = 'green';
-        errorMsg.textContent = "✅ Login successful! Redirecting...";
-        setTimeout(() => window.location.href = "Dhome.html", 1000);
-      } catch (err) {
-        console.error("Login error:", err);
-        errorMsg.textContent = "❌ Firebase error: " + (err.message || "Unknown error.");
-      }
+    localStorage.setItem("userId", matchedUser.userId || "");
+    localStorage.setItem("driverId", matchedUser.username || loginInput);
+    errorMsg.style.color = 'green';
+    errorMsg.textContent = "✅ Login successful! Redirecting...";
+    setTimeout(() => window.location.href = "Dhome.html", 1000);
+  } catch (err) {
+    console.error("Login error:", err);
+    errorMsg.textContent = "❌ Firebase error: " + (err.message || "Unknown error.");
+  }
+});
+
+
+/** -------------
+ * 2. Google Login
+ ------------- */
+window.googleLogin = async function () {
+  const provider = new GoogleAuthProvider();
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+
+    if (!user.emailVerified) {
+      alert("❌ Please verify your Google email before logging in.");
+      return;
+    }
+
+    const usersRef = ref(db, 'users');
+    const snapshot = await get(usersRef);
+    let matchedUser = null;
+    snapshot.forEach(childSnap => {
+      const userData = childSnap.val();
+      if (userData.email === user.email) matchedUser = userData;
     });
 
-    window.showTab = function (id) {
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.login-box').forEach(box => box.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-      document.querySelector(`[onclick="showTab('${id}')"]`).classList.add('active');
-    };
+    if (!matchedUser) {
+      alert("❌ Google email not registered in the system.");
+      return;
+    }
 
-    window.sendOtp = function () {
-      const phone = document.getElementById('otpPhone').value;
-      alert(`📲 Sending OTP to ${phone} (stub, not implemented)`);
-    };
+    if (matchedUser.role !== 'driver') {
+      alert("❌ Not a driver account.");
+      return;
+    }
 
-    window.verifyOtp = function () {
-      const code = document.getElementById('otpCode').value;
-      alert(`✅ Verifying OTP: ${code} (stub, not implemented)`);
-    };
+    if (matchedUser.status !== 'active') {
+      alert(`❌ Account is ${matchedUser.status}.`);
+      return;
+    }
 
-    window.googleLogin = function () {
-      alert("🌐 Google Sign-In is not yet implemented.");
-    };
-  </script>
+    localStorage.setItem("userId", matchedUser.userId || "");
+    localStorage.setItem("driverId", matchedUser.username || user.email);
+    alert("✅ Google login successful! Redirecting...");
+    setTimeout(() => window.location.href = "Dhome.html", 1000);
+  } catch (err) {
+    console.error("Google Sign-In Error:", err);
+    alert("❌ Google Sign-In failed: " + (err.message || "Unknown error"));
+  }
+};
+
+/** -------------------
+ * 3. Misc UI Handlers
+ ------------------- */
+window.showTab = function (id) {
+  document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.login-box').forEach(box => box.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelector(`[onclick="showTab('${id}')"]`).classList.add('active');
+};
+
+window.sendOtp = function () {
+  const phone = document.getElementById('otpPhone').value;
+  alert(`📲 Sending OTP to ${phone} (stub, not implemented)`);
+};
+
+window.verifyOtp = function () {
+  const code = document.getElementById('otpCode').value;
+  alert(`✅ Verifying OTP: ${code} (stub, not implemented)`);
+};
+
+window.togglePasswordVisibility = function () {
+  const passwordInput = document.getElementById("password");
+  const eyeIcon = document.getElementById("eyeIcon");
+  if (passwordInput.type === "password") {
+    passwordInput.type = "text";
+    eyeIcon.style.fill = "#00ff75";
+  } else {
+    passwordInput.type = "password";
+    eyeIcon.style.fill = "white";
+  }
+};
+</script>
+
+
+
+<script>
+window.togglePasswordVisibility = function () {
+  const pwdField = document.getElementById("password");
+  const eyeIcon = document.getElementById("eyeIcon");
+
+  if (pwdField.type === "password") {
+    pwdField.type = "text";
+    eyeIcon.innerHTML = `<path d="M1 12s4-7 11-7c2.2 0 4.2 0.6 6 1.6l2-2 1 1-19 19-1-1 2.2-2.2C3.3 15.5 1 12 1 12zm11 3c2.8 0 5-2.2 5-5 0-.5-.1-1-.3-1.5l-2 2A3.5 3.5 0 0 1 12 15c-.6 0-1.2-.2-1.7-.4l-1.4 1.4C10.2 16.8 11.1 17 12 17z"/>`;
+  } else {
+    pwdField.type = "password";
+    eyeIcon.innerHTML = `<path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12c-2.8 0-5-2.2-5-5s2.2-5 
+    5-5 5 2.2 5 5-2.2 5-5 5zm0-8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z"/>`;
+  }
+};
+
+
+
+</script>
 </body>
 </html>
