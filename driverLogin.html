@@ -546,20 +546,40 @@ document.querySelectorAll('.tab').forEach(btn => {
   });
 });
 
-// Password visibility toggle
+// Password visibility toggle with icon swap and color change
 const passwordInput = document.getElementById('password');
 const eyeIcon = document.getElementById('eyeIcon');
+
 if (eyeIcon && passwordInput) {
+  // Define SVGs for open-eye and closed-eye
+  const eyeOpenSVG = `
+    <path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12c-2.8 0-5-2.2-5-5s2.2-5 
+      5-5 5 2.2 5 5-2.2 5-5 5zm0-8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z"/>
+  `;
+  const eyeClosedSVG = `
+    <path d="M2.28 2.28a1 1 0 0 1 1.42 0l17 17a1 1 0 0 1-1.42 1.42l-2.1-2.1A10.93 10.93 0 0 1 12 19c-6 0-10-7-10-7 
+      1.34-2.28 3.4-4.1 5.85-5.2L2.28 3.7a1 1 0 0 1 0-1.42zM12 7a5 5 0 0 1 5 5c0 .76-.16 1.48-.44 2.14l-1.66-1.66A3 
+      3 0 0 0 12 9a3 3 0 0 0-2.2.9L8.14 8.44A5 5 0 0 1 12 7z"/>
+  `;
+
+  // Initialize with open-eye path
+  eyeIcon.innerHTML = eyeOpenSVG;
+
   eyeIcon.addEventListener('click', () => {
     if (passwordInput.type === 'password') {
       passwordInput.type = 'text';
       eyeIcon.setAttribute('aria-label', 'Hide password');
+      eyeIcon.classList.add('active');
+      eyeIcon.innerHTML = eyeClosedSVG; // swap to "eye off" icon
     } else {
       passwordInput.type = 'password';
       eyeIcon.setAttribute('aria-label', 'Show password');
+      eyeIcon.classList.remove('active');
+      eyeIcon.innerHTML = eyeOpenSVG; // swap back to open eye
     }
   });
 }
+
 
 // Login form stub
 const loginForm = document.getElementById('loginForm');
