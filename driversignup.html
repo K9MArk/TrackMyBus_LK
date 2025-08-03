@@ -2,161 +2,376 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Driver Registration - TrackMyBus</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      padding: 30px;
-    }
-    h2 {
-      color: #007BFF;
-    }
-    form {
-      background: #fff;
-      padding: 20px;
-      margin-bottom: 30px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
-      border-radius: 10px;
-      max-width: 600px;
-    }
-    input, select, button {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 14px;
-    }
-    button {
-      background-color: #28a745;
-      color: white;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #218838;
-    }
-    #addMsg, #errorMsg {
-      font-weight: bold;
-      margin-top: 10px;
-    }
-    #addMsg { color: green; }
-    #errorMsg { color: red; }
+  <title>Driver Registration</title>
+
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+     <link rel="stylesheet" href="C:\Users\Nadun Perera\public\test\6\dashL3.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+ <style>
+     /* Ocean Background */
+ /* Base Setup */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #05668D, #00A896);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+}
+ 
+
+        
+
+
+/* Card Form */
+.card {
+  width: 100%;
+  max-width: 500px;
+  margin: 20px;
+  padding: 30px 25px;
+  border-radius: 15px;
+  background: linear-gradient(to bottom right, #87CEEB, #ffffff);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  color: #000;
+  border: 3px solid #FFD700;
+  box-sizing: border-box;
+}
+
+.card h2 {
+  text-align: center;
+  color: #111;
+  margin-bottom: 15px;
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-shadow: 1px 1px #FFD700;
+}
+
+.card input[type="text"],
+.card input[type="password"],
+.card input[type="email"],
+.card input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.card button {
+  background-color: #FFD700;
+  color: black;
+  padding: 12px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 16px;
+  transition: background 0.3s ease;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.card button:hover {
+  background-color: #e6c200;
+}
+
+.card img#preview {
+  margin-top: 10px;
+  border-radius: 6px;
+  border: 2px solid #FFD700;
+  max-width: 100%;
+}
+
+.card p {
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+
+/* Make page scrollable on small screens */
+@media (max-width: 768px) {
+  body {
+    align-items: stretch;
+    justify-content: flex-start;
+    min-height: 100vh;
+  }
+
+  .card {
+    margin-top: 20px;
+    margin-bottom: 50px;
+  }
+}
+
+
+ 
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .card {
+    padding: 20px 15px;
+  }
+
+  .card h2 {
+    font-size: 1.5rem;
+  }
+
+  .card input,
+  .card button {
+    font-size: 14px;
+  }
+
+  .card img#preview {
+    max-width: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    margin: 10px;
+    padding: 15px;
+  }
+
+  .card h2 {
+    font-size: 1.3rem;
+  }
+
+  .card p {
+    font-size: 12px;
+  }
+
+  .card button {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
+.input-wrapper {
+  position: relative;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding-right: 36px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  font-size: 14px;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+.corner-verify-btn {
+  position: absolute;
+  top: 38%;
+  right: 9px;
+  transform: translateY(-50%);
+  background-color: #FFD700;
+  border-radius: 4px;
+  padding: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  width: 24px;
+}
+
+.corner-verify-btn:hover {
+  background-color: #e6c200;
+}
+
+.corner-verify-btn i {
+  font-size: 12px;
+  color: black;
+}
+
+
+        
   </style>
+
+
 </head>
 <body>
+  <div id="bubblesContainer" class="bubbles"></div>
+  <div class="card">
+    <h2>Driver Registration</h2>
+    <form id="driverForm">
+      <input type="text" id="username" placeholder="Username" required><br>
+<input type="password" id="password" placeholder="Password (min 6 chars)" required><br>
+<input type="text" id="fullname" placeholder="Full Name" required><br>
 
-<h2>Driver Registration</h2>
-<form id="driverForm">
-  <input type="text" id="username" placeholder="Username" required>
-  <input type="password" id="password" placeholder="Password (min 6 chars)" required>
-  <input type="text" id="fullname" placeholder="Full Name" required>
-  <input type="email" id="email" placeholder="Email Address" required>
-  <input type="text" id="phone" placeholder="Phone Number">
-  <input type="text" id="profilePic" placeholder="Profile Picture URL">
+<div class="input-wrapper">
+  <input type="email" id="email" placeholder="Email" required>
+  <span class="corner-verify-btn" onclick="sendEmailVerification()" title="Verify Email">
+    <i class="fas fa-check"></i>
+  </span>
+</div>
 
-  <select id="busId" required>
-    <option value="">Select Bus ID</option>
-    <option value="bus_101">bus_101</option>
-    <option value="bus_102">bus_102</option>
-  </select>
+<div class="input-wrapper">
+  <input type="text" id="phone" placeholder="Phone">
+  <span class="corner-verify-btn" onclick="verifyPhone()" title="Verify Phone">
+    <i class="fas fa-phone"></i>
+  </span>
+</div>
 
-  <select id="routeId" required>
-    <option value="">Select Route</option>
-    <option value="route_120">Kadawatha - Colombo</option>
-    <option value="route_130">Gampaha - Nugegoda</option>
-  </select>
+<label for="profilePic">Profile Picture (PNG only, Max 2MB):</label><br>
+<input type="file" id="profilePic" accept=".png"><br>
+<img id="preview" style="display:none; max-width:100px;"><br>
+<p id="fileError" style="color:red;"></p>
 
-  <input type="text" id="current_location" placeholder="Current Location (optional)">
-  <input type="text" id="status" placeholder="Bus Status (on_time, delayed)" value="on_time">
+<input type="hidden" id="status" value="active">
 
-  <button type="submit">Register Driver</button>
-  <p id="addMsg"></p>
-  <p id="errorMsg"></p>
+<button type="submit">Register</button><br>
+
+<!-- Removed old large verify buttons -->
+
+<div class="signup-text">
+  Do you already have an account?
+  <a href="driverLogin.html">Sign In</a>
+</div>
+<p id="addMsg" style="color:green;"></p>
+<p id="errorMsg" style="color:red;"></p>
 </form>
+  </div>
 
-<script>
-  document.getElementById('driverForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
+  <!-- 🔽 Firebase Scripts -->
+ 
 
-    const addMsg = document.getElementById('addMsg');
-    const errorMsg = document.getElementById('errorMsg');
-    addMsg.textContent = '';
-    errorMsg.textContent = '';
 
-    const user_name = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value.trim();
-    const full_name = document.getElementById('fullname').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const phone_number = document.getElementById('phone').value.trim();
-    const profile_picture = document.getElementById('profilePic').value.trim();
+<!-- Firebase v9 SDK -->
+<script type="module">
+ // ✅ Final Script: Firebase Signup with Email Verification
+// ⚠️ Requires Firebase Auth to be enabled for Email/Password & Phone
 
-    const busId = document.getElementById('busId').value.trim();
-    const routeId = document.getElementById('routeId').value.trim();
-    const current_location = document.getElementById('current_location').value.trim() || "unknown";
-    const status = document.getElementById('status').value.trim() || "on_time";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  signInWithPhoneNumber,
+  RecaptchaVerifier
+} from "https://www.gstatic.com/firebasejs/9.14.0/firebase-auth.js";
+import {
+  getDatabase,
+  ref,
+  set,
+  get,
+  child
+} from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
 
-    if (!user_name || !password || !full_name || !email || !busId || !routeId) {
-      errorMsg.textContent = "❌ Please fill in all required fields.";
-      return;
-    }
+// ✅ Your Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyAalfVG-12m72vwjYnr7IjAc0IwMCGlhY4",
+  authDomain: "busdriverlogin.firebaseapp.com",
+  databaseURL: "https://busdriverlogin-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "busdriverlogin",
+  storageBucket: "busdriverlogin.appspot.com",
+  messagingSenderId: "1014266280344",
+  appId: "1:1014266280344:web:80bfc786ceadac46d493ed"
+};
 
-    if (password.length < 6) {
-      errorMsg.textContent = "❌ Password must be at least 6 characters.";
-      return;
-    }
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const auth = getAuth();
 
-    try {
-      // Step 1: Register user
-      const userRes = await fetch('/api/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_name, password, full_name, email,
-          phone_number, profile_picture,
-          role: 'driver'
-        })
+// 📩 Trigger Email Verification
+document.querySelector('.corner-verify-btn[title="Verify Email"]').addEventListener('click', async () => {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value.trim();
+  if (!email || password.length < 6) return alert("Provide valid email & password");
+
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    await sendEmailVerification(cred.user);
+    alert("Verification email sent. Please check your inbox.");
+  } catch (err) {
+    alert("❌ " + err.message);
+  }
+});
+
+// 📱 Phone OTP Setup
+window.recaptchaVerifier = new RecaptchaVerifier('phone', {
+  'size': 'invisible',
+  'callback': (response) => {
+    console.log("reCAPTCHA solved")
+  }
+}, auth);
+
+async function verifyPhone() {
+  const phone = document.getElementById('phone').value.trim();
+  if (!phone) return alert("Enter phone number");
+
+  try {
+    const confirmationResult = await signInWithPhoneNumber(auth, phone, window.recaptchaVerifier);
+    const otp = prompt("Enter OTP sent to your phone:");
+    await confirmationResult.confirm(otp);
+    alert("✅ Phone verified successfully");
+  } catch (err) {
+    alert("❌ " + err.message);
+  }
+}
+
+window.verifyPhone = verifyPhone;
+
+// 📝 Form Submission
+document.getElementById('driverForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const fullname = document.getElementById('fullname').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const status = document.getElementById('status').value.trim();
+  const picture = document.getElementById('profilePic').files[0];
+
+  if (!username || !password || !fullname || !email) return alert("Fill all required fields");
+  if (password.length < 6) return alert("Password too short");
+
+  try {
+    const userRef = ref(db, 'users/' + username);
+    const snapshot = await get(userRef);
+    if (snapshot.exists()) return alert("Username already exists");
+
+    const userId = `user_${Date.now()}`;
+    const reader = new FileReader();
+    reader.onload = async function () {
+      await set(userRef, {
+        userId,
+        user_name: username,
+        password,
+        full_name: fullname,
+        email,
+        phone_number: phone,
+        profile_picture: picture ? reader.result : null,
+        role: 'driver',
+        status,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       });
+      alert("✅ Driver registered in database");
+    };
+    if (picture) reader.readAsDataURL(picture);
+    else reader.onload();
 
-      const userResult = await userRes.json();
+  } catch (err) {
+    alert("❌ " + err.message);
+  }
+});
 
-      if (!userRes.ok) {
-        errorMsg.textContent = "❌ " + (userResult.error || "Failed to register user");
-        return;
-      }
 
-      // Step 2: Register driver
-      const driverRes = await fetch('/api/drivers', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          driverId: "driver_" + Date.now(),
-          userId: userResult.userId,  // Use the userId from the response
-          busId,
-          routeId,
-          current_location,
-          status
-        })
-      });
-
-      const driverResult = await driverRes.json();
-
-      if (!driverRes.ok) {
-        errorMsg.textContent = "❌ " + (driverResult.error || "Failed to register driver");
-        return;
-      }
-
-      addMsg.textContent = "✅ Driver registered successfully!";
-      document.getElementById('driverForm').reset();
-    } catch (err) {
-      console.error(err);
-      errorMsg.textContent = "❌ Network or server error. Try again.";
-    }
-  });
 </script>
+ 
+<script src="/test/6/dash.js"></script>
 
-
-</body>
 </html>
-
-

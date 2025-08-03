@@ -40,7 +40,7 @@
       margin-bottom: 1.5rem;
     }
 
-    .input-box, .select-box {
+    .select-box {
       padding: 0.75rem 1rem;
       font-size: 1rem;
       border: 1px solid #ccc;
@@ -48,7 +48,7 @@
       outline: none;
     }
 
-    .input-box:focus, .select-box:focus {
+    .select-box:focus {
       border-color: #007bff;
     }
 
@@ -126,85 +126,106 @@
     <div id="busResults" class="result-box"></div>
   </div>
 
-  <script>
-  window.onload = async function () {
-    const selectBox = document.getElementById("routeSelect");
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+  import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
 
-    try {
-      const res = await fetch("/api/routes/all");
-      const routes = await res.json();
-
-      const unique = {};
-      routes.forEach(route => {
-        if (!unique[route.route_name]) {
-          const option = document.createElement("option");
-          option.value = route.routeId;  // still use routeId internally
-          option.textContent = route.route_name;
-          selectBox.appendChild(option);
-          unique[route.route_name] = true;
-        }
-      });
-    } catch (err) {
-      console.error("Failed to load routes:", err);
-    }
+  const firebaseConfig = {
+    apiKey: "AIzaSyAalfVG-12m72vwjYnr7IjAc0IwMCGlhY4",
+    authDomain: "busdriverlogin.firebaseapp.com",
+    databaseURL: "https://busdriverlogin-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "busdriverlogin",
+    storageBucket: "busdriverlogin.appspot.com",
+    messagingSenderId: "1014266280344",
+    appId: "1:1014266280344:web:80bfc786ceadac46d493ed"
   };
 
-  document.getElementById("searchForm").addEventListener("submit", async function (e) {
-    e.preventDefault();
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
 
-    const routeId = document.getElementById("routeSelect").value;
-    if (!routeId) return;
+  const routeSelect = document.getElementById("routeSelect");
+  const busResults = document.getElementById("busResults");
+
+  // Load available routes into dropdown
+  async function loadRoutes() {
+    try {
+      const snapshot = await get(ref(db, "routeDetails"));
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        Object.entries(data).forEach(([rid, route]) => {
+          const name = route.route_name || route.from?.route_name || "Unnamed";
+          const description = route.route_description || "No description";
+          const option = document.createElement("option");
+          option.value = rid;
+          option.textContent = `${name} (${rid}) - ${description}`;
+          routeSelect.appendChild(option);
+        });
+      }
+    } catch (error) {
+      console.error("❌ Failed to load routes:", error);
+    }
+  }
+
+  // Handle route search
+  document.getElementById("searchForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    busResults.innerHTML = "";
+
+    const selectedRouteId = routeSelect.value;
+    if (!selectedRouteId) return;
 
     try {
-      const resultBox = document.getElementById("busResults");
-      resultBox.innerHTML = '';
+      const [busesSnap, currentLocationSnap] = await Promise.all([
+        get(ref(db, "buses")),
+        get(ref(db, "bus_location_current"))
+      ]);
 
-      // Step 1: Get route details
-      const routeRes = await fetch(`/api/routes/byId?routeId=${encodeURIComponent(routeId)}`);
-      const route = await routeRes.json();
-
-      if (!route || !route.route_name) {
-        resultBox.innerHTML = `<p>No route data found.</p>`;
+      if (!busesSnap.exists() || !currentLocationSnap.exists()) {
+        busResults.innerHTML = `<p>No active buses found for this route.</p>`;
         return;
       }
 
-      // Step 2: Get all buses for this route
-      const busRes = await fetch(`/api/buses/byRoute?routeId=${encodeURIComponent(routeId)}`);
-      const buses = await busRes.json();
+      const buses = busesSnap.val();
+      const currentLocations = currentLocationSnap.val();
 
-      if (!Array.isArray(buses) || buses.length === 0) {
-        resultBox.innerHTML = `<p>No buses found on this route.</p>`;
+      // Filter to active buses on selected route
+      const activeBuses = Object.entries(currentLocations).filter(([busId, loc]) => {
+        return loc.routeId === selectedRouteId;
+      });
+
+      if (activeBuses.length === 0) {
+        busResults.innerHTML = `<p>No buses currently running on this route.</p>`;
         return;
       }
 
-      // Step 3: Render bus cards
-      buses.forEach(bus => {
+      for (const [busId, loc] of activeBuses) {
+        const busInfo = buses[busId];
+        if (!busInfo) continue;
+
         const card = document.createElement("div");
         card.className = "bus-card";
         card.innerHTML = `
-          <h3>${route.route_name}</h3>
-          <p>Description: ${route.route_description || 'No description available'}</p>
-          <p><strong>Bus #</strong>: ${bus.bus_number}</p>
-          <p><strong>Plate</strong>: ${bus.plate_number}</p>
-          <button class="app-button secondary" onclick="trackOnMap('${bus._id}')">Track on Map</button>
+          <h3>Route ID: ${selectedRouteId}</h3>
+          <p><strong>Bus #</strong>: ${busInfo.bus_number}</p>
+          <p><strong>Plate</strong>: ${busInfo.plate_number}</p>
+          <p><strong>Model</strong>: ${busInfo.model || 'N/A'}</p>
+          <button class="app-button secondary" onclick="trackOnMap('${busId}')">Track on Map</button>
         `;
-        resultBox.appendChild(card);
-      });
-
-    } catch (err) {
-      console.error("Error loading route or buses:", err);
-      alert("Something went wrong.");
+        busResults.appendChild(card);
+      }
+    } catch (error) {
+      console.error("❌ Error loading buses:", error);
+      alert("Error loading buses.");
     }
   });
 
-  function trackOnMap(busId) {
+  window.trackOnMap = function (busId) {
     window.location.href = `passengerMap.html?busId=${busId}`;
-  }
+  };
 
-  function findNearestHalts() {
-    alert("Nearest halts feature is under development.");
-  }
+  loadRoutes();
 </script>
+
 
 </body>
 </html>
