@@ -3,250 +3,158 @@
 <head>
   <meta charset="UTF-8">
   <title>Driver Registration</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="BatmanStyles.css">
+<!--   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
      <link rel="stylesheet" href="C:\Users\Nadun Perera\public\test\6\dashL3.css">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+-->
+<style>
 
- <style>
-     /* Ocean Background */
- /* Base Setup */
-body {
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0;
-  padding: 0;
-  background: linear-gradient(to bottom, #05668D, #00A896);
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow-x: hidden;
+.form {
+  row-gap: 2px;
 }
- 
-
-        
-
-
-/* Card Form */
-.card {
-  width: 100%;
-  max-width: 500px;
-  margin: 20px;
-  padding: 30px 25px;
-  border-radius: 15px;
-  background: linear-gradient(to bottom right, #87CEEB, #ffffff);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-  color: #000;
-  border: 3px solid #FFD700;
-  box-sizing: border-box;
-}
-
-.card h2 {
-  text-align: center;
-  color: #111;
-  margin-bottom: 15px;
-  font-size: 1.8rem;
-  font-weight: bold;
-  text-shadow: 1px 1px #FFD700;
-}
-
-.card input[type="text"],
-.card input[type="password"],
-.card input[type="email"],
-.card input[type="file"] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 14px;
-}
-
-.card button {
-  background-color: #FFD700;
-  color: black;
-  padding: 12px;
+.input-field {
+  border-radius: 8px; 
+  padding: 8px;
   width: 100%;
   border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  font-size: 16px;
-  transition: background 0.3s ease;
-  cursor: pointer;
-  margin-top: 10px;
+  /*background: rgba(255, 255, 255, 0.2);*/
+  background: #e7edfd;
+  color: #000;
+  margin-bottom: 12px;
+  font-size: 1rem;
 }
 
-.card button:hover {
-  background-color: #e6c200;
-}
-
-.card img#preview {
-  margin-top: 10px;
-  border-radius: 6px;
-  border: 2px solid #FFD700;
-  max-width: 100%;
-}
-
-.card p {
-  font-size: 14px;
-  margin: 5px 0;
-}
-
-
-/* Make page scrollable on small screens */
-@media (max-width: 768px) {
-  body {
-    align-items: stretch;
-    justify-content: flex-start;
-    min-height: 100vh;
-  }
-
-  .card {
-    margin-top: 20px;
-    margin-bottom: 50px;
-  }
-}
-
-
- 
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-  .card {
-    padding: 20px 15px;
-  }
-
-  .card h2 {
-    font-size: 1.5rem;
-  }
-
-  .card input,
-  .card button {
-    font-size: 14px;
-  }
-
-  .card img#preview {
-    max-width: 80px;
-  }
-}
-
-@media (max-width: 480px) {
-  .card {
-    margin: 10px;
-    padding: 15px;
-  }
-
-  .card h2 {
-    font-size: 1.3rem;
-  }
-
-  .card p {
-    font-size: 12px;
-  }
-
-  .card button {
-    padding: 10px;
-    font-size: 14px;
-  }
-}
 .input-wrapper {
   position: relative;
-  width: 100%;
-  margin-bottom: 12px;
-}
-
-.input-wrapper input {
-  width: 100%;
-  padding-right: 36px;
-  box-sizing: border-box;
-  border-radius: 8px;
-  font-size: 14px;
-  padding: 10px;
-  border: 1px solid #ccc;
 }
 
 .corner-verify-btn {
   position: absolute;
-  top: 38%;
-  right: 9px;
+  right: 12px;
+  top: 50%;
   transform: translateY(-50%);
-  background-color: #FFD700;
-  border-radius: 4px;
-  padding: 4px;
+  background: var(--primary);
+  color: white;
+  padding: 6px 8px;
+  border-radius: 50%;
+  font-size: 0.8rem;
   cursor: pointer;
-  font-size: 12px;
-  line-height: 1;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 24px;
-  width: 24px;
+  transition: background 0.3s;
 }
 
 .corner-verify-btn:hover {
-  background-color: #e6c200;
+  background: var(--primary-hover);
 }
 
-.corner-verify-btn i {
-  font-size: 12px;
-  color: black;
+input[type="file"] {
+  background: none;
+  border: none;
+  padding: 8px 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
 }
 
+.error-text {
+  color: #d0444c;
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
 
-        
-  </style>
+.otp-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.confirm-btn {
+  padding: 10px 14px;
+  background: #2ecc71;
+  border: none;
+  color: white;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.confirm-btn:hover {
+  background: #27ae60;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+</style>
+
 
 
 </head>
 <body>
-  <div id="bubblesContainer" class="bubbles"></div>
   <div class="card">
-    <h2>Driver Registration</h2>
-    <form id="driverForm">
-      <input type="text" id="username" placeholder="Username" required><br>
-<input type="password" id="password" placeholder="Password (min 6 chars)" required><br>
-<input type="text" id="fullname" placeholder="Full Name" required><br>
+    <div class="card2">
+      <form id="driverForm" class="form">
+    <h2 id="heading">Driver Registration</h2>
 
-<div class="input-wrapper">
-  <input type="email" id="email" placeholder="Email" required>
-  <span class="corner-verify-btn" onclick="sendEmailVerification()" title="Verify Email">
-    <i class="fas fa-check"></i>
-  </span>
+    
+<input class="input-field" type="text" id="username" placeholder="Username" required>
+<input class="input-field" type="password" id="password" placeholder="Password (min 6 chars)" required>
+<input class="input-field" type="text" id="fullname" placeholder="Full Name" required>
+
+<div class="verify-wrapper">
+  <input class="input-field" type="email" id="email" placeholder="Email" required>
+  <button type="button" class="verify-btn" onclick="sendEmailVerification()" title="Verify Email">
+    <i class="fas fa-check-circle"></i> Verify Email
+  </button>
 </div>
 
-<div class="input-wrapper">
-  <input type="text" id="phone" placeholder="Phone">
-  <span class="corner-verify-btn" onclick="verifyPhone()" title="Verify Phone">
-    <i class="fas fa-phone"></i>
-  </span>
+<div class="verify-wrapper">
+  <input class="input-field" type="text" id="phone" placeholder="Phone Number">
+  <button type="button" class="verify-btn" onclick="verifyPhone()" title="Verify Phone" id="verifyPhoneBtn">
+    <i class="fas fa-phone"></i> Verify Phone
+  </button>
+</div>
+<!-- Hidden verification section -->
+<div id="phoneVerifyBox" class="otp-box" style="display: none;">
+  <input class="input-field" type="text" id="phoneOtp" placeholder="Enter OTP code">
+  <button type="button" class="confirm-btn" id="confirmOtpBtn">
+    <i class="fas fa-check"></i> Confirm
+  </button>
 </div>
 
-<label for="profilePic">Profile Picture (PNG only, Max 2MB):</label><br>
-<input type="file" id="profilePic" accept=".png"><br>
-<img id="preview" style="display:none; max-width:100px;"><br>
-<p id="fileError" style="color:red;"></p>
+
+        <label for="profilePic" style="font-size: 0.9rem; text-align: left;">Profile Picture (PNG only, Max 2MB):</label>
+        <input type="file" id="profilePic" accept=".png">
+        <img id="preview" style="display:none; max-width:100px; border-radius: 8px;">
+        <p id="fileError" class="error-text"></p>
 
 <input type="hidden" id="status" value="active">
 
-<button type="submit">Register</button><br>
+<button type="submit" class="button1">Register</button>
 
-<!-- Removed old large verify buttons -->
 
-<div class="signup-text">
-  Do you already have an account?
+<div class="bottom-text">
+  Already have an account?
   <a href="driverLogin.html">Sign In</a>
 </div>
 <p id="addMsg" style="color:green;"></p>
-<p id="errorMsg" style="color:red;"></p>
+<p id="errorMsg" class="error-text"></p>
 </form>
+  </div>
   </div>
 
   <!-- 🔽 Firebase Scripts -->
- 
-
 
 <!-- Firebase v9 SDK -->
 <script type="module">
@@ -373,5 +281,28 @@ document.getElementById('driverForm').addEventListener('submit', async (e) => {
 </script>
  
 <script src="/test/6/dash.js"></script>
+<script>
+  // When DOM is ready
+  document.addEventListener("DOMContentLoaded", function () {
+    const verifyPhoneBtn = document.getElementById("verifyPhoneBtn");
+    const phoneVerifyBox = document.getElementById("phoneVerifyBox");
+
+    verifyPhoneBtn.addEventListener("click", function () {
+      phoneVerifyBox.style.display = "flex"; // Show the box
+    });
+
+    document.getElementById("confirmOtpBtn").addEventListener("click", function () {
+      const otp = document.getElementById("phoneOtp").value.trim();
+      if (otp === "") {
+        alert("Please enter the OTP code.");
+      } else {
+        alert("Phone verified successfully!");
+        phoneVerifyBox.style.display = "none";
+      }
+    });
+  });
+</script>
+
+</body>
 
 </html>

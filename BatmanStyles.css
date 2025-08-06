@@ -463,3 +463,39 @@ body {
       right: 10px;
       z-index: 1000;
     }
+
+    .verify-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.verify-wrapper input {
+  flex: 1;
+}
+
+.verify-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border: none;
+  border-radius: 12px;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.70rem;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.verify-btn i {
+  font-size: 1rem;
+}
+
+.verify-btn:hover {
+  background: var(--primary-hover);
+}
+
