@@ -9,13 +9,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>TrackMyBus LK</title>
+  <link rel="stylesheet" href="BatmanStyles.css">
 
   <!-- ✅ External Dependencies -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.5.2/velocity.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/trianglify@4.1.1/dist/trianglify.bundle.min.js"></script>
 
-  <style>
+  <!--<style>
     * {
       box-sizing: border-box;
     }
@@ -179,80 +180,98 @@
     .footer-links a:hover {
       text-decoration: underline;
     }
+  </style>-->
+  <style>
+    .big-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 100%;
+  padding: 18px 24px;
+  margin: 12px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+  border: none;
+  border-radius: 999px;
+  background: var(--primary);
+  color: #fff;
+  transition: var(--transition);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.big-button:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
+.big-button.secondary {
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--text-primary);
+}
+
+.big-button.secondary:hover {
+  filter: brightness(0.95);
+}
+
+
+    .animation-welcome {
+  animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
   </style>
 </head>
 
+
 <body>
+  <div class="card">
+    <div class="card2">
+      <div class="form">
 
+        <!-- ✅ Header -->
+        <h1 id="heading">TrackMyBus LK</h1>
+        <p class="bottom-text">Your Journey. Live.</p>
 
-  <!-- partial:index.partial.html -->
-<div id="##background-container" class="#background-container">
-   <div id="background-1" class="background-1"></div>
-   <div id="background-2" class="background-2"></div>
+        <!-- ✅ Welcome GIF -->
+        <section class="animation-welcome" style="text-align: center;">
+          <video autoplay muted loop playsinline style="max-width: 100%; border-radius: 12px;">
+            <source src="Welcome.gif" type="video/gif">
+            Your browser does not support the video tag.
+          </video>
+          <div class="welcome-text bottom-text">
+            Welcome to <strong>TrackMyBus LK</strong>! <br>We help you find real-time buses and track your rides live across Sri Lanka.
+          </div>
+        </section>
+
+        <!-- ✅ Buttons -->
+        <div class="btn" style="flex-direction: column; gap: 16px;">
+  <a href="passengerSearch.html" class="big-button">🎒 Passenger — Track Your Bus</a>
+  <a href="driverLogin.html" class="big-button secondary">🚌 Driver — Login to Start Tracking</a>
 </div>
-<!-- partial -->
-  <script src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-<script src='https://rawgit.com/searleb/portfolio-source/master/source/javascripts/d3.js'></script>
-<script src='https://rawgit.com/searleb/portfolio-source/master/source/javascripts/trianglify.min.js'></script>
-<script src='https://rawgit.com/searleb/portfolio-source/master/source/javascripts/velocity.js'></script><script  src="./script.js"></script>
 
-  <!-- ✅ Dynamic Background -->
-  <div class="##background-container">
-    <div id="background-1" class="background-1"></div>
-    <div id="background-2" class="background-2"></div>
-  </div>
 
-  <!-- ✅ Header -->
-  <header class="app-bar">
-    <h1>TrackMyBus LK</h1>
-    <p>Your Journey. Live.</p>
-  </header>
+        <!-- ✅ Footer Links -->
+        <div class="divider-wrapper" style="margin-top: 30px;">
+          <div class="divider-line"></div>
+          <div class="divider-text">TrackMyBus Devs</div>
+          <div class="divider-line"></div>
+        </div>
+        <div class="bottom-text">
+          <a href="#">About</a> | <a href="#">Help</a> | <a href="#">Privacy</a>
+        </div>
 
-  <!-- ✅ Main Content -->
-  <main class="app-container">
-    <section class="animation-welcome">
-      <video autoplay muted loop playsinline>
-        <source src="Welcome.gif" type="video/gif">
-        Your browser does not support the video tag.
-      </video>
-      <div class="welcome-text">
-        Welcome to <strong>TrackMyBus LK</strong>! We help you find real-time buses and track your rides live across Sri Lanka.
       </div>
-    </section>
-
-    <section class="buttons">
-      <a href="passengerSearch.html" class="btn-link">
-        <div class="btn-icon">
-          <svg viewBox="0 0 24 24"><path d="M18 11V6a4 4 0 0 0-8 0v5H5v6h14v-6h-1zm-6 6a2 2 0 1 1 4 0 2 2 0 0 1-4 0zM7 18a2 2 0 1 0 4 0 2 2 0 0 0-4 0z"/></svg>
-        </div>
-        <div class="btn-text">
-          <div class="btn-title">Passenger</div>
-          <div class="btn-desc">Search routes and track your bus</div>
-        </div>
-      </a>
-
-      <a href="driverLogin.html" class="btn-link">
-        <div class="btn-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-9.95 11.14A9.98 9.98 0 0 0 12 22a10 10 0 0 0 9.95-11.14A9.98 9.98 0 0 0 12 2zm0 18a8 8 0 0 1-7.75-6h15.5A8 8 0 0 1 12 20zm0-14a7.95 7.95 0 0 1 5.65 2.34L12 11V6zm0 0v5l-5.65-4.66A7.95 7.95 0 0 1 12 6z"/></svg>
-        </div>
-        <div class="btn-text">
-          <div class="btn-title">Driver</div>
-          <div class="btn-desc">Access your driver dashboard</div>
-        </div>
-      </a>
-    </section>
-  </main>
-
-  <!-- ✅ Footer -->
-  <footer class="app-footer">
-    <div>Powered by TrackMyBus Devs</div>
-    <nav class="footer-links">
-      <a href="#">About</a>
-      <a href="#">Help</a>
-      <a href="#">Privacy</a>
-    </nav>
-  </footer>
-
-
+    </div>
+  </div>
 </body>
+
 </html>

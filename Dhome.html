@@ -5,11 +5,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Add Bus and Route - TrackMyBus.lk</title>
+  <link rel="stylesheet" href="BatmanStyles.css">
+  <style>
+    
+  </style>
 </head>
-<body>
-  <nav>
-    <a href="Dhome.html">Home</a>
-    <a href="addBusAndRoute.html">Add Bus and Route</a>
+<body>  <nav>
+    <a href="Dhome.html" class="active">Home</a>
+    <a href="addBusAndRoute.html">Add Bus & Route</a>
     <a href="driverTrack.html">Driver Track</a>
   </nav>
 
@@ -27,11 +30,12 @@
         <option value="">Select Route</option>
       </select>
 
-      <button type="submit" id="submitBtn">Add Bus and Route</button>
+      <button type="submit" id="submitBtn">Add Bus & Route</button>
       <p id="addMsg"></p>
       <p id="errorMsg"></p>
     </form>
   </div>
+
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
@@ -174,6 +178,51 @@
   });
 
   populateRoutes();
+</script>
+<script>
+      // Highlight active nav link
+    document.querySelectorAll('nav a').forEach(link => {
+      link.addEventListener('click', e => {
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        e.currentTarget.classList.add('active');
+      });
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const routeDropdown = document.getElementById('routeDropdown');
+      // TODO: Fetch routes from Firebase and populate dropdown
+      ['Route A', 'Route B', 'Route C'].forEach(route => {
+        const opt = document.createElement('option');
+        opt.value = route;
+        opt.textContent = route;
+        routeDropdown.appendChild(opt);
+      });
+
+      document.getElementById('addBusAndRouteForm').addEventListener('submit', e => {
+        e.preventDefault();
+        const addMsg = document.getElementById('addMsg');
+        const errorMsg = document.getElementById('errorMsg');
+        addMsg.textContent = '';
+        errorMsg.textContent = '';
+
+        const busNumber = document.getElementById('busNumber').value.trim();
+        const plateNumber = document.getElementById('plateNumber').value.trim();
+        const capacity = document.getElementById('capacity').value.trim();
+        const busModel = document.getElementById('busModel').value.trim();
+        const route = routeDropdown.value;
+
+        if (!route) {
+          errorMsg.textContent = 'Please select a route.';
+          return;
+        }
+
+        // TODO: Send data to backend or Firebase
+        console.log({ busNumber, plateNumber, capacity, busModel, route });
+
+        addMsg.textContent = 'Bus and route added successfully!';
+        e.target.reset();
+      });
+    });
 </script>
 
 </body>
