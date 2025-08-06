@@ -1,277 +1,253 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-    <meta charset="UTF-8">
- 
-  <link rel="stylesheet" href="./style.css">
-
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
   <title>TrackMyBus LK</title>
-  <link rel="stylesheet" href="BatmanStyles.css">
-
-  <!-- ✅ External Dependencies -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.5.2/velocity.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/trianglify@4.1.1/dist/trianglify.bundle.min.js"></script>
-
-  <!--<style>
-    * {
-      box-sizing: border-box;
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --primary: #2196f3;
+      --primary-hover: #1976d2;
+      --gray: #757575;
+      --divider: #e3e3e3;
     }
-
     html, body {
+      height: 100%;
       margin: 0;
       padding: 0;
-      height: 100%;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: transparent;
+      background: #fff;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    body {
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
+      align-items: stretch;
     }
-
-    .background-container {
-      position: fixed;
-      top: 0;
-      left: 0;
+    header {
       width: 100%;
-      height: 100%;
-      z-index: -1;
-      overflow: hidden;
-    }
-
-    .background-1, .background-2 {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      background-size: cover;
-      background-position: center;
-    }
-
-    header.app-bar {
-      padding: 20px;
+      padding: 24px 0 8px 0;
       text-align: center;
-      background: rgba(255, 255, 255, 0.6);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      z-index: 1;
     }
-
-    header.app-bar h1 {
-      margin: 0;
+    #heading {
+      font-size: 2rem;
       font-weight: 700;
-      font-size: 1.6rem;
+      margin: 0 0 6px 0;
     }
-
-    header.app-bar p {
-      margin: 5px 0 0;
-      font-size: 0.9rem;
-      color: #3166cc;
+    .subtitle {
+      color: var(--gray);
+      font-size: 1.08rem;
+      margin-bottom: 0;
     }
-
-    main.app-container {
-      flex: 1 0 auto;
-      max-width: 460px;
-      width: 90%;
-      margin: 20px auto;
-      z-index: 1;
-    }
-
-    .animation-welcome {
-      display: flex;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(10px);
-      border-radius: 12px;
-      padding: 16px;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .animation-welcome video {
-      width: 120px;
-      border-radius: 8px;
-    }
-
-    .welcome-text {
-      color: #fff;
-      font-weight: 600;
-      font-size: 1rem;
-    }
-
-    .buttons {
-      display: grid;
-      gap: 16px;
-      margin-top: 20px;
-    }
-
-    .btn-link {
-      all: unset;
+    .main-content {
+      flex: 1;
       display: flex;
       align-items: center;
-      gap: 16px;
-      padding: 16px;
-      background: rgba(0, 0, 0, 0.45);
-      backdrop-filter: blur(12px);
-      color: #fff;
-      border-radius: 10px;
-      cursor: pointer;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-      transition: background 0.3s;
+      justify-content: center;
+      min-height: 400px;
     }
-
-    .btn-link:hover {
-      background: rgba(0, 0, 0, 0.6);
-    }
-
-    .btn-icon {
-      width: 44px;
-      height: 44px;
-      background: #111;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-    }
-
-    .btn-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: #fff;
-    }
-
-    .btn-text {
+    .card {
+      background: #fff;
+      border: 1px solid #bbb;
+      border-radius: 18px;
+      box-shadow: 0 2px 14px rgba(44, 62, 80, 0.09);
+      padding: 24px 18px 18px 18px;
+      width: 98vw;
+      max-width: 380px;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      row-gap: 10px;
     }
-
-    .btn-title {
-      font-weight: bold;
-    }
-
-    .btn-desc {
-      font-size: 0.85rem;
-      color: #ddd;
-    }
-
-    footer.app-footer {
-      text-align: center;
-      font-size: 0.8rem;
-      color: #0a2142;
-      padding: 20px 10px;
-      z-index: 1;
-    }
-
-    .footer-links {
-      margin-top: 10px;
+    /* ---- WELCOME ROW: IMAGE LEFT, TEXT RIGHT ---- */
+    .welcome-row {
+      width: 100%;
+      margin: 4px 0 18px 0;
       display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .welcome-row img, .welcome-row video {
+      width: 110px;
+      height: 105px;
+      object-fit: contain;
+      border-radius: 8px;
+      background: transparent;
+      display: block;
+      flex-shrink: 0;
+    }
+    .welcome-text {
+      font-size: 0.97rem;
+      color: #222;
+      font-weight: bold;
+      text-align: left;
+      margin: 0;
+      line-height: 1.4;
+      word-break: break-word;
+      flex: 1;
+    }
+    .main-welcome {
+      margin: 8px 0 0 0;
+      font-size: 1.07rem;
+      text-align: center;
+      color: #444;
+      font-weight: 500;
+    }
+    .main-welcome b {
+      font-weight: 700;
+    }
+    .desc {
+      color: #666;
+      font-size: 0.97rem;
+      margin-bottom: 22px;
+      margin-top: 4px;
+      text-align: center;
+      font-weight: 400;
+    }
+    /* ---- BUTTONS: USE GRID ---- */
+    .btn-group {
+      width: 100%;
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      gap: 18px;
+      margin-top: 0;
+      margin-bottom: 14px;
+    }
+    .big-button {
+      display: flex;
+      align-items: center;
       justify-content: center;
-      gap: 20px;
-    }
-
-    .footer-links a {
-      color: #3166cc;
+      gap: 10px;
+      width: 100%;
+      padding: 22px 0;      /* more vertical padding */
+      border: none;
+      border-radius: 999px;
+      font-size: 1.09rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(33,150,243,0.11);
       text-decoration: none;
-      font-weight: 600;
+      transition: background 0.14s;
     }
-
+    .big-button img {
+      width: 25px;
+      height: 25px;
+      vertical-align: middle;
+      margin-right: 4px;
+      filter: drop-shadow(0 1px 2px rgba(44,62,80,0.06));
+    }
+    .big-button.passenger img {
+      margin-left: -8px;
+      margin-right: 12px;
+    }
+    .big-button:hover {
+      background: var(--primary-hover);
+      text-decoration: none;
+    }
+    .big-button.secondary {
+      /*background: #f5f5f5;*/
+      background: #e8e8e8;
+      color: #222;
+      border: none;
+      box-shadow: 0 4px 12px rgba(33,150,243,0.07);
+    }
+    .big-button.secondary:hover {
+      background: #ececec;
+    }
+    footer {
+      width: 100%;
+      padding-bottom: 14px;
+    }
+    .divider-wrapper {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      margin: 18px 0 4px 0;
+    }
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: var(--divider);
+    }
+    .divider-text {
+      font-size: 0.97rem;
+      color: #bbb;
+      padding: 0 10px;
+      font-weight: 500;
+    }
+    .footer-links {
+      text-align: center;
+      color: #888;
+      font-size: 0.97rem;
+      margin-bottom: 0;
+      margin-top: 0;
+    }
+    .footer-links a {
+      color: #2196f3;
+      text-decoration: none;
+      margin: 0 8px;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
     .footer-links a:hover {
+      color: #1976d2;
       text-decoration: underline;
     }
-  </style>-->
-  <style>
-    .big-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: 100%;
-  padding: 18px 24px;
-  margin: 12px 0;
-  font-size: 1.1rem;
-  font-weight: 700;
-  text-align: center;
-  border: none;
-  border-radius: 999px;
-  background: var(--primary);
-  color: #fff;
-  transition: var(--transition);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.big-button:hover {
-  background: var(--primary-hover);
-  transform: translateY(-1px);
-  text-decoration: none;
-}
-
-.big-button.secondary {
-  background: rgba(0, 0, 0, 0.04);
-  color: var(--text-primary);
-}
-
-.big-button.secondary:hover {
-  filter: brightness(0.95);
-}
-
-
-    .animation-welcome {
-  animation: fadeIn 1s ease-in;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
+    /* Responsive: on mobile, still keep welcome row horizontal and let text wrap */
+    @media (max-width: 430px) {
+      .welcome-row {
+        gap: 10px;
+      }
+      .welcome-text {
+        font-size: 0.95rem;
+      }
+    }
   </style>
 </head>
-
-
 <body>
-  <div class="card">
-    <div class="card2">
-      <div class="form">
-
-        <!-- ✅ Header -->
-        <h1 id="heading">TrackMyBus LK</h1>
-        <p class="bottom-text">Your Journey. Live.</p>
-
-        <!-- ✅ Welcome GIF -->
-        <section class="animation-welcome" style="text-align: center;">
-          <video autoplay muted loop playsinline style="max-width: 100%; border-radius: 12px;">
-            <source src="Welcome.gif" type="video/gif">
-            Your browser does not support the video tag.
-          </video>
-          <div class="welcome-text bottom-text">
-            Welcome to <strong>TrackMyBus LK</strong>! <br>We help you find real-time buses and track your rides live across Sri Lanka.
-          </div>
-        </section>
-
-        <!-- ✅ Buttons -->
-        <div class="btn" style="flex-direction: column; gap: 16px;">
-  <a href="passengerSearch.html" class="big-button">🎒 Passenger — Track Your Bus</a>
-  <a href="driverLogin.html" class="big-button secondary">🚌 Driver — Login to Start Tracking</a>
-</div>
-
-
-        <!-- ✅ Footer Links -->
-        <div class="divider-wrapper" style="margin-top: 30px;">
-          <div class="divider-line"></div>
-          <div class="divider-text">TrackMyBus Devs</div>
-          <div class="divider-line"></div>
+  <header>
+    <h1 id="heading">TrackMyBus LK</h1>
+    <div class="subtitle">Your Journey. Live.</div>
+  </header>
+  <main class="main-content">
+    <div class="card">
+      <div class="welcome-row">
+        <img src="Welcome.gif" alt="Welcome Animation" />
+        <div class="welcome-text">
+           Be polite — <br>
+           good manners make the journey better for all!
         </div>
-        <div class="bottom-text">
-          <a href="#">About</a> | <a href="#">Help</a> | <a href="#">Privacy</a>
-        </div>
-
+      </div>
+      <div class="main-welcome">
+        Welcome to <b>TrackMyBus LK</b> !
+      </div>
+      <div class="desc">
+        We help you find real-time buses and track your rides live across Sri Lanka.
+      </div>
+      <div class="btn-group">
+        <a href="passengerSearch.html" class="big-button passenger">
+          <img src="passenger.png" alt="Passenger" />
+          Passenger - Find Your Bus
+        </a>
+        <a href="driverLogin.html" class="big-button secondary">
+          <img src="driver.png" alt="Driver" />
+          Driver - Login to Start Tracking
+        </a>
+      </div>
+      <div class="divider-wrapper">
+        <div class="divider-line"></div>
+        <div class="divider-text">TrackMyBus</div>
+        <div class="divider-line"></div>
       </div>
     </div>
-  </div>
+  </main>
+  <footer>
+    <div class="footer-links">
+      <a href="#">About</a> | <a href="#">Help</a> | <a href="#">Privacy</a>
+    </div>
+  </footer>
 </body>
-
 </html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Help - TrackMyBus LK</title>
+  <link rel="stylesheet" href="BatmanStyles.css" />
+  <style>
+    .help-container {
+      max-width: 720px;
+      margin: 40px auto;
+      background: var(--card-bg);
+      padding: 32px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .help-title {
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 24px;
+    }
+
+    .faq {
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--input-bg);
+      padding-bottom: 12px;
+    }
+
+    .faq h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .faq h3:hover {
+      color: var(--primary);
+    }
+
+    .faq p {
+      margin-top: 8px;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      display: none;
+    }
+
+    .faq.open p {
+      display: block;
+    }
+
+    .contact-section {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+
+    .contact-section a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .contact-section a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="help-container">
+    <div class="help-title">Help & FAQ - TrackMyBus LK</div>
+
+    <div class="faq">
+      <h3 onclick="toggleFaq(this)">🚌 How do I track a bus?</h3>
+      <p>Go to the Passenger section, enter your route, and view the live map showing the bus in real time.</p>
+    </div>
+
+    <div class="faq">
+      <h3 onclick="toggleFaq(this)">📱 Can I use TrackMyBus on mobile?</h3>
+      <p>Yes! The system is fully mobile-friendly and designed for use on smartphones and tablets.</p>
+    </div>
+
+    <div class="faq">
+      <h3 onclick="toggleFaq(this)">🔐 Is my data secure?</h3>
+      <p>Yes. We use Firebase Authentication and real-time database with secure rules to protect your data.</p>
+    </div>
+
+    <div class="faq">
+      <h3 onclick="toggleFaq(this)">👨‍✈️ I'm a driver. How do I sign in?</h3>
+      <p>Go to the Driver section and log in using your registered credentials to start sharing your location.</p>
+    </div>
+
+    <div class="contact-section">
+  Still need help?
+  <a href="mailto:harithfernando3gmail.com?subject=Help%20Request&body=Hi%20TrackMyBus%20team,%0A%0AI%20need%20assistance%20with...">
+    Contact our team
+  </a>
+</div>
+
+  </div>
+
+  <script>
+    function toggleFaq(element) {
+      const faq = element.parentElement;
+      faq.classList.toggle("open");
+    }
+  </script>
+</body>
+</html>

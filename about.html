@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About - TrackMyBus LK</title>
+  <link rel="stylesheet" href="BatmanStyles.css" />
+  <style>
+    .about-container {
+      max-width: 720px;
+      margin: 40px auto;
+      background: var(--card-bg);
+      padding: 32px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .about-title {
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    .about-section {
+      margin-bottom: 24px;
+    }
+
+    .about-section h3 {
+      font-size: 1.2rem;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .about-section p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .team-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .team-member {
+      background: var(--input-bg);
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+    }
+
+    @media (min-width: 600px) {
+      .team-section {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+      .team-member {
+        flex: 1 1 45%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="about-container">
+    <div class="about-title">About TrackMyBus LK</div>
+
+    <div class="about-section">
+      <h3>🚍 What is TrackMyBus LK?</h3>
+      <p>
+        TrackMyBus LK is a web-based real-time bus tracking system built specifically for Sri Lanka’s public transport network. It helps passengers locate nearby bus halts, estimate bus arrival times, and view live GPS-based tracking — all from their mobile or computer.
+      </p>
+    </div>
+
+    <div class="about-section">
+      <h3>🎯 Our Mission</h3>
+      <p>
+        Our mission is to make Sri Lanka’s public bus transport smarter, safer, and more efficient by leveraging real-time data and user-friendly interfaces. We also use 2D animations to guide and educate passengers on proper bus behavior.
+      </p>
+    </div>
+
+    <div class="about-section">
+      <h3>💡 Key Features</h3>
+      <p>
+        - Real-time bus tracking<br>
+        - Bus halt locator with nearest halt detection<br>
+        - ETA predictions <br>
+        - Firebase Authentication (OTP, email, Google login)<br>
+        - Educational animations at key stages
+      </p>
+    </div>
+
+    <div class="about-section">
+      <h3>👨‍💻 Developed By</h3>
+      <div class="team-section">
+        <div class="team-member">
+          Pruthivi Fernando<br>
+          Final Year Undergraduate – Multimedia Technology<br>
+          University Project 2025
+        </div>
+        <div class="team-member">
+          Tools: Firebase, Google Maps API, HTML, CSS, JavaScript <br>
+          Contact: <a href="mailto:support@trackmybus.lk" style="color: var(--primary); text-decoration: none;">harithfernando3gmail.com</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

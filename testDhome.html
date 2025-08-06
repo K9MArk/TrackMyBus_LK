@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Driver Home - TrackMyBus LK</title>
+  <link rel="stylesheet" href="BatmanStyles.css" />
+  <style>
+  
+  /* Base driver home container */
+  .driver-home {
+    max-width: 720px;
+    margin: 40px auto;
+    background: var(--card-bg, rgba(255, 255, 255, 0.1));
+    padding: 24px;
+    border-radius: var(--radius, 16px);
+    box-shadow: var(--shadow, 0 8px 24px rgba(0,0,0,0.1));
+    backdrop-filter: blur(10px);
+  }
+
+  .driver-heading {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary, #1a73e8);
+    margin-bottom: 16px;
+  }
+
+  /* Navigation bar */
+  nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 12px;
+    background: var(--card-bg, rgba(255,255,255,0.15));
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+  }
+
+  nav a {
+    color: var(--text-primary, #1a1a1a);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: 0.3s;
+  }
+
+  nav a.active,
+  nav a:hover {
+    background: var(--primary, #1a73e8);
+    color: #fff;
+  }
+
+  /* Profile Section */
+  .driver-profile {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  }
+
+  .driver-profile h3 {
+    color: var(--primary, #1a73e8);
+    margin-bottom: 16px;
+  }
+
+  .driver-profile label {
+    display: block;
+    margin-bottom: 12px;
+    color: var(--text-primary, #1a1a1a);
+    font-weight: 500;
+  }
+
+  .driver-profile input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    font-size: 1rem;
+    color: #000;
+    margin-top: 4px;
+  }
+
+  .driver-profile input:disabled {
+    opacity: 0.8;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .button1,
+  .button2,
+  .driver-button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 999px;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    color: white;
+    background: linear-gradient(90deg, #1d8f4d, #87f69b);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  }
+
+  .driver-button {
+    background: linear-gradient(90deg, #2196f3, #6dd5fa);
+  }
+
+  .driver-button:hover,
+  .button1:hover,
+  .button2:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+  }
+
+  .driver-gif {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .driver-gif img {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+  }
+
+  /* Responsive tweaks */
+  @media (max-width: 600px) {
+    nav {
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .driver-home {
+      margin: 16px;
+      padding: 16px;
+    }
+
+    .button1, .button2, .driver-button {
+      font-size: 0.95rem;
+      padding: 12px;
+    }
+
+    .driver-profile input {
+      font-size: 0.9rem;
+    }
+  }
+
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="Dhome.html" class="active">Home</a>
+    <a href="addBusAndRoute.html">Add Bus & Route</a>
+    <a href="driverTrack.html">Start Tracking</a>
+  </nav>
+
+
+  <div class="driver-home">
+    <div class="driver-heading">Welcome, Driver 👋</div>
+
+    <div class="driver-profile" id="driverProfile">
+  <h3>👨‍✈️ Driver Profile</h3>
+  <form id="driverForm" class="profile-card">
+    <label>Name: <input type="text" id="driverName" disabled></label><br>
+    <label>Email: <input type="email" id="driverEmail" disabled></label><br>
+    <label>Phone: <input type="text" id="driverPhone" disabled></label><br>
+    <label>Bus Number: <input type="text" id="busNumber" disabled></label><br>
+    <label>Plate Number: <input type="text" id="plateNumber" disabled></label><br>
+    <label>Capacity: <input type="number" id="capacity" disabled></label><br>
+    <label>Route: <input type="text" id="routeInfo" disabled></label><br>
+    <label>Status: <input type="text" id="driverStatus" disabled></label><br>
+
+    <div style="margin-top: 10px;">
+      <button type="button" id="editBtn" class="button1">✏️ Edit</button>
+      <button type="submit" id="saveBtn" class="button2" style="display: none;">💾 Save</button>
+    </div>
+  </form>
+  <div style="text-align: right; margin-bottom: 10px;">
+  <button id="logoutBtn" class="driver-button" style="background: #d0444c;">🚪 Logout</button>
+</div>
+</div>
+
+    <div class="driver-gif">
+      <img src="driver.gif" alt="Driver Welcome Animation" />
+    </div>
+
+    <div class="driver-buttons">
+      <a href="addBusAndRoute.html" class="driver-button">🚌 Add Bus & Assign Route</a>
+      <a href="driverTrack.html" class="driver-button">📍 Start Tracking</a>
+    </div>
+  </div>
+
+</body>
+</html>
