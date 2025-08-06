@@ -5,12 +5,12 @@
   <title>Driver Registration</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="BatmanStyles.css">
-<!--   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
      <link rel="stylesheet" href="C:\Users\Nadun Perera\public\test\6\dashL3.css">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
--->
+
 <style>
 
 .form {
@@ -114,7 +114,7 @@ input[type="file"] {
 
 <div class="verify-wrapper">
   <input class="input-field" type="email" id="email" placeholder="Email" required>
-  <button type="button" class="verify-btn" onclick="sendEmailVerification()" title="Verify Email">
+  <button type="button" class="verify-btn" title="Verify Email">
     <i class="fas fa-check-circle"></i> Verify Email
   </button>
 </div>
@@ -193,7 +193,7 @@ const db = getDatabase(app);
 const auth = getAuth();
 
 // 📩 Trigger Email Verification
-document.querySelector('.corner-verify-btn[title="Verify Email"]').addEventListener('click', async () => {
+document.querySelector('.verify-btn[title="Verify Email"]').addEventListener('click', async () => {
   const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value.trim();
   if (!email || password.length < 6) return alert("Provide valid email & password");
@@ -281,28 +281,7 @@ document.getElementById('driverForm').addEventListener('submit', async (e) => {
 </script>
  
 <script src="/test/6/dash.js"></script>
-<script>
-  // When DOM is ready
-  document.addEventListener("DOMContentLoaded", function () {
-    const verifyPhoneBtn = document.getElementById("verifyPhoneBtn");
-    const phoneVerifyBox = document.getElementById("phoneVerifyBox");
 
-    verifyPhoneBtn.addEventListener("click", function () {
-      phoneVerifyBox.style.display = "flex"; // Show the box
-    });
 
-    document.getElementById("confirmOtpBtn").addEventListener("click", function () {
-      const otp = document.getElementById("phoneOtp").value.trim();
-      if (otp === "") {
-        alert("Please enter the OTP code.");
-      } else {
-        alert("Phone verified successfully!");
-        phoneVerifyBox.style.display = "none";
-      }
-    });
-  });
-</script>
-
-</body>
 
 </html>
