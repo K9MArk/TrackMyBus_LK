@@ -287,7 +287,7 @@ snapshot.forEach(childSnap => {
     localStorage.setItem("driverId", matchedUser.username || loginInput);
     errorMsg.style.color = 'green';
     errorMsg.textContent = "✅ Login successful! Redirecting...";
-    setTimeout(() => window.location.href = "Dhome.html", 1000);
+    setTimeout(() => window.location.href = "driverTrack.html", 1000);
   } catch (err) {
     console.error("Login error:", err);
     errorMsg.textContent = "❌ Firebase error: " + (err.message || "Unknown error.");
@@ -335,7 +335,7 @@ window.googleLogin = async function () {
     localStorage.setItem("userId", matchedUser.userId || "");
     localStorage.setItem("driverId", matchedUser.username || user.email);
     alert("✅ Google login successful! Redirecting...");
-    setTimeout(() => window.location.href = "Dhome.html", 1000);
+    setTimeout(() => window.location.href = "driverTrack.html", 1000);
   } catch (err) {
     console.error("Google Sign-In Error:", err);
     alert("❌ Google Sign-In failed: " + (err.message || "Unknown error"));

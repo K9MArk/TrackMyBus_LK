@@ -6,10 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-     <link rel="stylesheet" href="C:\Users\Nadun Perera\public\test\6\dashL3.css">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="BatmanStyles.css">
 
 <style>
 
@@ -278,6 +275,27 @@ document.getElementById('driverForm').addEventListener('submit', async (e) => {
 });
 
 
+</script>
+<script>
+  // When DOM is ready
+  document.addEventListener("DOMContentLoaded", function () {
+    const verifyPhoneBtn = document.getElementById("verifyPhoneBtn");
+    const phoneVerifyBox = document.getElementById("phoneVerifyBox");
+
+    verifyPhoneBtn.addEventListener("click", function () {
+      phoneVerifyBox.style.display = "flex"; // Show the box
+    });
+
+    document.getElementById("confirmOtpBtn").addEventListener("click", function () {
+      const otp = document.getElementById("phoneOtp").value.trim();
+      if (otp === "") {
+        alert("Please enter the OTP code.");
+      } else {
+        alert("Phone verified successfully!");
+        phoneVerifyBox.style.display = "none";
+      }
+    });
+  });
 </script>
  
 <script src="/test/6/dash.js"></script>

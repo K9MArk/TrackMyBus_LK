@@ -1,153 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Save Driver Test</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f5f5;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .form-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            margin: 0 auto;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            font-size: 14px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        button {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            background-color: #28a745;
-            color: white;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #218838;
-        }
-
-        p {
-            font-weight: bold;
-        }
-
-        #addMsg {
-            color: green;
-        }
-
-        #errorMsg {
-            color: red;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Bus and Route - TrackMyBus.lk</title>
+  <link rel="stylesheet" href="BatmanStyles.css">
+  <style>
+    
+  </style>
 </head>
-<body>
+<body>  <nav>
+   <!-- <a href="Dhome.html" class="active">Home</a> -->
+    
+    <a href="driverTrack.html">Driver Track</a>
+    <a href="addBusAndRoute.html">Add Bus & Route</a>
+  </nav>
 
-    <div class="form-container">
-        <h2>Save Driver Test</h2>
-        <form id="addDriverForm">
-            <input type="text" id="driverId" placeholder="Driver ID" required>
-            <input type="text" id="busId" placeholder="Bus ID" required>
-            <input type="text" id="routeId" placeholder="Route ID" required>
-            <button type="submit">Save Driver</button>
-        </form>
+  <div class="container">
+    <h1>Add New Bus and Route</h1>
+    <form id="addBusAndRouteForm">
+      <h3>Bus Details</h3>
+      <input type="text" id="busNumber" placeholder="Bus Number" required />
+      <input type="text" id="plateNumber" placeholder="Plate Number" required />
+      <input type="number" id="capacity" placeholder="Capacity" required />
+      <input type="text" id="busModel" placeholder="Bus Model" required />
 
-        <p id="addMsg"></p>
-        <p id="errorMsg"></p>
+      <h3>Route Details</h3>
+      <select id="routeDropdown" required>
+        <option value="">Select Route</option>
+      </select>
 
-        <!-- Temporary Debugging: Show the fetched userId -->
-        <div>
-            <p>Fetched User ID (from localStorage): <span id="fetchedUserId">Not Available</span></p>
-        </div>
-    </div>
+      <button type="submit" id="submitBtn">Add Bus & Route</button>
+      <p id="addMsg"></p>
+      <p id="errorMsg"></p>
+    </form>
+  </div>
 
-    <script>
-        // Function to fetch userId from localStorage (assuming user has logged in)
-        function getUserIdFromLocalStorage() {
-            const userId = localStorage.getItem('userId');
-            document.getElementById('fetchedUserId').textContent = userId || 'Not Available';
-            return userId;
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+  import {
+    getDatabase, ref, get, set, onValue
+  } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAalfVG-12m72vwjYnr7IjAc0IwMCGlhY4",
+    authDomain: "busdriverlogin.firebaseapp.com",
+    databaseURL: "https://busdriverlogin-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "busdriverlogin",
+    storageBucket: "busdriverlogin.appspot.com",
+    messagingSenderId: "1014266280344",
+    appId: "1:1014266280344:web:80bfc786ceadac46d493ed"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  const userId = localStorage.getItem('userId');
+  const routeDropdown = document.getElementById('routeDropdown');
+  const addMsg = document.getElementById('addMsg');
+  const errorMsg = document.getElementById('errorMsg');
+
+  // Load routes into dropdown
+  function populateRoutes() {
+    const routeDetailsRef = ref(db, 'routeDetails');
+    onValue(routeDetailsRef, (snapshot) => {
+      if (snapshot.exists()) {
+        routeDropdown.innerHTML = '<option value="">Select Route</option>';
+        const data = snapshot.val();
+        Object.entries(data).forEach(([rid, routeObj]) => {
+          const name = routeObj.route_name || routeObj.from?.route_name || "Unnamed";
+          const description = routeObj.route_description || routeObj.description || "No description";
+          const option = document.createElement('option');
+          option.value = rid;
+          option.textContent = `${name} (${rid}) - ${description}`;
+          routeDropdown.appendChild(option);
+        });
+      }
+    });
+  }
+
+  // Handle form submission
+  document.getElementById('addBusAndRouteForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    addMsg.textContent = '';
+    errorMsg.textContent = '';
+
+    const busNumber = document.getElementById('busNumber').value.trim();
+    const plateNumber = document.getElementById('plateNumber').value.trim();
+    const capacity = document.getElementById('capacity').value.trim();
+    const busModel = document.getElementById('busModel').value.trim();
+    const selectedRouteId = routeDropdown.value;
+
+    if (!busNumber || !plateNumber || !capacity || !busModel || !selectedRouteId) {
+      errorMsg.textContent = "❌ Please fill in all required fields.";
+      return;
+    }
+
+    if (!userId) {
+      errorMsg.textContent = "❌ User not logged in!";
+      return;
+    }
+
+    try {
+      const [driverSnap, busesSnap] = await Promise.all([
+        get(ref(db, 'drivers')),
+        get(ref(db, 'buses'))
+      ]);
+
+      // ❌ Block if driver already exists for this user
+      const drivers = driverSnap.val();
+      if (drivers) {
+        const hasDriver = Object.values(drivers).some(d => d.userId === userId);
+        if (hasDriver) {
+          errorMsg.textContent = "❌ You have already registered as a driver.";
+          return;
+        }
+      }
+
+      // ❌ Block if bus plate exists or user already has a bus
+      const buses = busesSnap.val();
+      if (buses) {
+        const duplicatePlate = Object.values(buses).some(b => b.plate_number === plateNumber);
+        const userHasBus = Object.values(buses).some(b => b.userId === userId);
+        if (duplicatePlate) {
+          errorMsg.textContent = "❌ This plate number is already registered.";
+          return;
+        }
+        if (userHasBus) {
+          errorMsg.textContent = "❌ You have already added a bus.";
+          return;
+        }
+      }
+
+      const busId = `bus_${Date.now()}`;
+      const routeId = `route_${Date.now()}`;
+      const driverId = `driver_${Date.now()}`;
+
+      const newBus = {
+        bus_number: busNumber,
+        plate_number: plateNumber,
+        capacity: Number(capacity),
+        model: busModel,
+        routeId: selectedRouteId,
+        userId
+      };
+
+      const newRoute = {
+        routeId,
+        route_name: selectedRouteId, // Save only FK
+        userId
+      };
+
+      const newDriver = {
+        driverId,
+        userId,
+        busId,
+        routeId: selectedRouteId,
+        status: 'on_time',
+        current_location: 'unknown',
+        last_update: new Date().toISOString()
+      };
+
+      await Promise.all([
+        set(ref(db, `buses/${busId}`), newBus),
+        set(ref(db, `routes/${routeId}`), newRoute),
+        set(ref(db, `drivers/${driverId}`), newDriver)
+      ]);
+
+      addMsg.textContent = "✅ Success! Your bus, route, and driver record has been added.";
+      document.getElementById('addBusAndRouteForm').reset();
+
+    } catch (err) {
+      console.error(err);
+      errorMsg.textContent = "❌ Firebase error. Please try again later.";
+    }
+  });
+
+  populateRoutes();
+</script>
+<!--<script>
+      // Highlight active nav link
+    document.querySelectorAll('nav a').forEach(link => {
+      link.addEventListener('click', e => {
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        e.currentTarget.classList.add('active');
+      });
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const routeDropdown = document.getElementById('routeDropdown');
+      // TODO: Fetch routes from Firebase and populate dropdown
+      ['Route A', 'Route B', 'Route C'].forEach(route => {
+        const opt = document.createElement('option');
+        opt.value = route;
+        opt.textContent = route;
+        routeDropdown.appendChild(opt);
+      });
+
+      document.getElementById('addBusAndRouteForm').addEventListener('submit', e => {
+        e.preventDefault();
+        const addMsg = document.getElementById('addMsg');
+        const errorMsg = document.getElementById('errorMsg');
+        addMsg.textContent = '';
+        errorMsg.textContent = '';
+
+        const busNumber = document.getElementById('busNumber').value.trim();
+        const plateNumber = document.getElementById('plateNumber').value.trim();
+        const capacity = document.getElementById('capacity').value.trim();
+        const busModel = document.getElementById('busModel').value.trim();
+        const route = routeDropdown.value;
+
+        if (!route) {
+          errorMsg.textContent = 'Please select a route.';
+          return;
         }
 
-        // Handle form submission
-        document.getElementById('addDriverForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+        // TODO: Send data to backend or Firebase
+        console.log({ busNumber, plateNumber, capacity, busModel, route });
 
-            const addMsg = document.getElementById('addMsg');
-            const errorMsg = document.getElementById('errorMsg');
-            addMsg.textContent = '';
-            errorMsg.textContent = '';
-
-            // Get the userId from localStorage
-            const userId = getUserIdFromLocalStorage();
-            if (!userId) {
-                errorMsg.textContent = "❌ User ID not available!";
-                return;
-            }
-
-            // Get the driver data from the form
-            const driverId = document.getElementById('driverId').value.trim();
-            const busId = document.getElementById('busId').value.trim();
-            const routeId = document.getElementById('routeId').value.trim();
-
-            if (!driverId || !busId || !routeId) {
-                errorMsg.textContent = "❌ Please fill in all required fields.";
-                return;
-            }
-
-            try {
-                // Prepare the new driver data
-                const newDriver = {
-                    driverId: driverId,
-                    userId: userId,  // Automatically taken from localStorage
-                    busId: busId,
-                    routeId: routeId,
-                    status: 'on_time', // Default status
-                    current_location: 'unknown', // Default location
-                    last_update: new Date()
-                };
-
-                // Send POST request to save the driver
-                const driverRes = await fetch('/api/drivers', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(newDriver)
-                });
-
-                const driverResult = await driverRes.json();
-
-                if (!driverRes.ok) {
-                    errorMsg.textContent = "❌ Failed to add driver.";
-                    return;
-                }
-
-                addMsg.textContent = "✅ Driver added successfully!";
-                document.getElementById('addDriverForm').reset();
-
-            } catch (err) {
-                console.error(err);
-                errorMsg.textContent = "❌ Network or server error. Try again.";
-            }
-        });
-    </script>
+        addMsg.textContent = 'Bus and route added successfully!';
+        e.target.reset();
+      });
+    });
+</script>
+-->
 
 </body>
+
 </html>
