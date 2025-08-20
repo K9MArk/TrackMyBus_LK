@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Driver Profile</title>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    input { width: 250px; padding: 6px; margin: 5px 0; }
+    img { border-radius: 10px; }
+    button { margin-right: 10px; padding: 8px 16px; }
+  </style>
+</head>
+<body>
+
+  <h2>Driver Profile</h2>
+
+  <img id="profilePic" src="default.png" width="120" height="120" alt="Profile Picture"><br>
+  <input type="file" id="uploadPic" accept="image/*"><br><br>
+
+  <label>Full Name:</label><br>
+  <input type="text" id="fullName" disabled><br>
+
+  <label>Email:</label><br>
+  <input type="email" id="email" disabled><br>
+
+  <label>Phone:</label><br>
+  <input type="text" id="phone" disabled><br>
+
+  <label>Bus Number:</label><br>
+  <input type="text" id="busNumber" disabled><br>
+
+  <label>Plate Number:</label><br>
+  <input type="text" id="plateNumber" disabled><br>
+
+  <label>Route Name:</label><br>
+  <input type="text" id="routeName" disabled><br><br>
+
+  <button id="editBtn">Edit</button>
+  <button id="saveBtn" style="display:none;">Save</button>
+  <button id="logoutBtn">Logout</button>
+
+  <script>
+    // ✅ REPLACE THIS WITH YOUR OWN CONFIG
+    const firebaseConfig = {
+  apiKey: "AIzaSyAalfVG-12m72vwjYnr7IjAc0IwMCGlhY4",
+  authDomain: "busdriverlogin.firebaseapp.com",
+  databaseURL: "https://busdriverlogin-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "busdriverlogin",
+  storageBucket: "busdriverlogin.appspot.com",
+  messagingSenderId: "1014266280344",
+  appId: "1:1014266280344:web:80bfc786ceadac46d493ed"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    const db = firebase.database();
+let currentUserKey = null;
+let userId = null;
+let originalData = {};
+
+firebase.auth().onAuthStateChanged(async (user) => {
+  if (!user) return window.location.href = "login.html";
+  const email = user.email;
+
+  // ✅ Step 1: Find user in /users by matching email
+  const usersSnap = await db.ref("users").once("value");
+  let userProfile = null;
+
+  for (const key in usersSnap.val()) {
+    const u = usersSnap.val()[key];
+    if (u.email === email) {
+      userProfile = u;
+      currentUserKey = key;
+      userId = u.userId; // VERY IMPORTANT
+      break;
+    }
+  }
+
+  if (!userProfile || !userId) return alert("❌ User not found");
+
+  // ✅ Step 2: Get driver using userId as the key in /drivers
+  const driverSnap = await db.ref("drivers/" + userId).once("value");
+  const driver = driverSnap.val();
+
+  if (!driver) return alert("❌ Driver entry not found for this user.");
+
+  // ✅ Step 3: Get bus and route
+  const busSnap = await db.ref("buses/" + driver.busId).once("value");
+  const routeSnap = await db.ref("routeDetails/" + driver.routeId).once("value");
+
+  const bus = busSnap.val() || {};
+  const route = routeSnap.val() || {};
+
+  // ✅ Step 4: Populate form
+  document.getElementById("fullName").value = userProfile.full_name || "";
+  document.getElementById("email").value = userProfile.email || "";
+  document.getElementById("phone").value = userProfile.phone_number || "";
+  document.getElementById("profilePic").src = userProfile.profile_picture || "default.png";
+
+  document.getElementById("busNumber").value = bus.bus_number || "";
+  document.getElementById("plateNumber").value = bus.plate_number || "";
+  document.getElementById("routeName").value = route.route_name || "";
+
+  originalData = {
+    full_name: userProfile.full_name || "",
+    phone_number: userProfile.phone_number || ""
+  };
+});
+
+
+    // Enable Edit
+    document.getElementById("editBtn").onclick = () => {
+      document.getElementById("fullName").disabled = false;
+      document.getElementById("phone").disabled = false;
+      document.getElementById("saveBtn").style.display = "inline-block";
+      document.getElementById("editBtn").style.display = "none";
+    };
+
+    // Save changes
+    document.getElementById("saveBtn").onclick = async () => {
+      const updatedName = document.getElementById("fullName").value.trim();
+      const updatedPhone = document.getElementById("phone").value.trim();
+
+      if (updatedName !== originalData.full_name || updatedPhone !== originalData.phone_number) {
+        await db.ref("users/" + currentUserKey).update({
+          full_name: updatedName,
+          phone_number: updatedPhone
+        });
+        alert("Profile updated!");
+        originalData.full_name = updatedName;
+        originalData.phone_number = updatedPhone;
+      }
+
+      document.getElementById("fullName").disabled = true;
+      document.getElementById("phone").disabled = true;
+      document.getElementById("saveBtn").style.display = "none";
+      document.getElementById("editBtn").style.display = "inline-block";
+    };
+
+    // Upload profile picture
+    document.getElementById("uploadPic").addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (!file || !currentUserKey) return;
+
+      const fileRef = storage.ref("profile_pictures/" + currentUserKey);
+      await fileRef.put(file);
+      const url = await fileRef.getDownloadURL();
+
+      document.getElementById("profilePic").src = url;
+
+      await db.ref("users/" + currentUserKey).update({
+        profile_picture: url
+      });
+    });
+
+    // Logout
+    document.getElementById("logoutBtn").onclick = () => {
+      firebase.auth().signOut().then(() => {
+        window.location.href = "login.html";
+      });
+    };
+  </script>
+</body>
+</html>
