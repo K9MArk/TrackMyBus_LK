@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Firebase DB Connection Test - View Users</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"></script>
+  <style>
+    body { font-family: Arial; padding: 20px; background: #f9f9f9; }
+    h2 { color: #007BFF; }
+    .log { margin-top: 20px; font-family: monospace; white-space: pre-wrap; }
+    .success { color: green; }
+    .error { color: red; }
+    .user { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; background: #fff; }
+  </style>
+</head>
+<body>
+
+<h2>🔍 Firebase Connection & User Data Test</h2>
+<div id="status" class="log"></div>
+<div id="usersContainer"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+  import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+  const statusBox = document.getElementById("status");
+  const usersContainer = document.getElementById("usersContainer");
+
+  function logStatus(message, type = "log") {
+    const span = document.createElement("div");
+    span.className = type;
+    span.textContent = message;
+    statusBox.appendChild(span);
+  }
+
+  try {
+    // ✅ STEP 1: Your Firebase Config
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    // ✅ STEP 2: Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    logStatus("✅ Firebase initialized successfully", "success");
+
+    // ✅ STEP 3: Try to fetch users
+    const usersRef = ref(db, 'users');
+
+    get(usersRef).then((snapshot) => {
+      if (snapshot.exists()) {
+        logStatus("✅ Data fetched from Firebase", "success");
+        const users = snapshot.val();
+        Object.keys(users).forEach(uid => {
+          const u = users[uid];
+          const div = document.createElement("div");
+          div.className = "user";
+          div.innerHTML = `
+            <strong>User ID:</strong> ${uid}<br>
+            <strong>Name:</strong> ${u.full_name || 'N/A'}<br>
+            <strong>Email:</strong> ${u.email || 'N/A'}
+          `;
+          usersContainer.appendChild(div);
+        });
+      } else {
+        logStatus("⚠️ No user data found under 'users/'", "error");
+      }
+    }).catch((error) => {
+      logStatus("❌ Error reading data: " + error.message, "error");
+      console.error(error);
+    });
+
+  } catch (err) {
+    logStatus("❌ Firebase init failed: " + err.message, "error");
+    console.error(err);
+  }
+</script>
+
+</body>
+</html>
